@@ -114,7 +114,11 @@ body {
     font-size: 17px;
     line-height: 1.55;
     margin: 24px 0 29px;
+    width: 100%;
+    max-width: 650px;
   }
+  .site-frame[data-locale="ua"] .hero__copy { max-width: 675px; }
+  .site-frame[data-locale="en"] .hero__copy { max-width: 640px; }
 
   .hero__actions { gap: 33px; }
 
@@ -241,7 +245,8 @@ body {
   .brand__main-logo { width: 160px; }
   .hero__content { padding-top: 46px; padding-bottom: 34px; }
   .hero h1 { font-size: 50px; line-height: .97; max-width: 570px; }
-  .hero__copy { font-size: 14px; line-height: 1.5; margin: 18px 0 21px; }
+  .hero__copy { font-size: 14px; line-height: 1.5; margin: 18px 0 21px; max-width: 560px; }
+  .site-frame[data-locale="ua"] .hero__copy { max-width: 590px; }
   .pink-btn { min-width: 214px; height: 44px; }
   .platforms { margin-top: 30px; }
   .platforms__row img { max-height: 24px; }
@@ -261,11 +266,13 @@ body {
   .brand__main-logo { width: 138px; }
   .hero { min-height: 650px !important; height: auto !important; }
   .hero__content { padding-top: 48px !important; padding-bottom: 30px !important; }
+  .hero__copy { max-width: 92%; }
   .platforms { margin-top: 24px !important; }
 }
 
 @media (max-width: 520px) {
   .hero { min-height: 620px !important; }
   .hero__content { padding-top: 42px !important; padding-bottom: 24px !important; }
+  .hero__copy { max-width: 94%; }
   .platforms { margin-top: 22px !important; }
 }
