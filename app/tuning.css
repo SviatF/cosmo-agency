@@ -9,6 +9,20 @@ body {
     linear-gradient(180deg, #040409 0%, #08040d 48%, #040409 100%);
 }
 
+.brand--navbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: fit-content;
+}
+
+.brand__main-logo {
+  display: block;
+  width: 164px;
+  height: auto;
+  object-fit: contain;
+}
+
 @media (min-width: 1240px) {
   body { padding: 0; }
 
@@ -92,12 +106,7 @@ body {
     gap: 24px;
   }
 
-  .brand { gap: 18px; }
-  .brand__planet { width: 67px; height: 32px; }
-  .brand__planet::after { top: 12px; height: 2px; }
-  .brand__planet i { width: 10px; height: 10px; left: 27px; top: 9px; }
-  .brand__text { font-size: 32px; }
-  .brand__text small { font-size: 7px; margin-top: 10px; margin-left: 40px; }
+  .brand__main-logo { width: 198px; }
 
   .nav { gap: 29px; font-size: 13px; }
   .outline-btn { height: 51px; border-radius: 29px; font-size: 13px; }
@@ -252,6 +261,7 @@ body {
 
   .hero { min-height: 520px; }
   .header { height: 70px; }
+  .brand__main-logo { width: 160px; }
   .hero__content { padding-top: 46px; padding-bottom: 34px; }
   .hero h1 { font-size: 50px; line-height: .97; max-width: 570px; }
   .hero__copy { font-size: 14px; line-height: 1.5; margin: 18px 0 21px; }
@@ -267,4 +277,5 @@ body {
 @media (max-width: 820px) {
   body { padding: 0; }
   .site-frame { width: 100%; margin: 0; border: 0; border-radius: 0; overflow: hidden; }
+  .brand__main-logo { width: 138px; }
 }
