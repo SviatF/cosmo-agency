@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const OPEN_EVENT = 'cosmo:open-application';
 
@@ -28,6 +28,7 @@ export function ApplicationTrigger({ className = '', children }) {
 export function ApplicationModal() {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
+  const firstInputRef = useRef(null);
 
   useEffect(() => {
     const openModal = () => {
@@ -43,7 +44,9 @@ export function ApplicationModal() {
     const onKey = (event) => event.key === 'Escape' && setOpen(false);
     document.addEventListener('keydown', onKey);
     document.body.style.overflow = 'hidden';
+    const timer = window.setTimeout(() => firstInputRef.current?.focus(), 180);
     return () => {
+      window.clearTimeout(timer);
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = '';
     };
@@ -56,18 +59,27 @@ export function ApplicationModal() {
     const endpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT;
     setStatus('sending');
 
+    const payload = {
+      name: String(data.name || '').trim(),
+      phone: String(data.phone || '').trim(),
+      telegram: String(data.telegram || '').trim(),
+      source: 'cosmo-agency',
+      page: typeof window !== 'undefined' ? window.location.href : '',
+      submitted_at: new Date().toISOString(),
+    };
+
     try {
       if (endpoint) {
         const response = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...data, source: 'cosmo-agency' }),
+          body: JSON.stringify(payload),
         });
         if (!response.ok) throw new Error('Lead endpoint returned an error');
       } else {
         const subject = encodeURIComponent('Новая заявка — COSMO Agency');
         const body = encodeURIComponent(
-          `Имя: ${data.name}\nВозраст: ${data.age}\nКонтакт: ${data.contact}\nГород / страна: ${data.location || '-'}\nОпыт: ${data.experience || '-'}\n`
+          `Имя: ${payload.name}\nТелефон: ${payload.phone}\nTelegram: ${payload.telegram || '-'}\nСтраница: ${payload.page}\n`
         );
         window.location.href = `mailto:hello@cosmo.agency?subject=${subject}&body=${body}`;
       }
@@ -90,23 +102,34 @@ export function ApplicationModal() {
         <button className="lead-modal__close" type="button" aria-label="Закрыть" onClick={() => setOpen(false)}>×</button>
         <p className="eyebrow">COSMO AGENCY</p>
         <h2 id="lead-modal-title">Оставить заявку</h2>
-        <p className="lead-modal__intro">Заполни короткую форму — команда COSMO свяжется с тобой и расскажет о следующих шагах.</p>
+        <p className="lead-modal__intro">Оставь контакты — команда COSMO свяжется с тобой и расскажет о следующих шагах.</p>
 
         {status === 'success' ? (
           <div className="lead-modal__success">
             <strong>Спасибо!</strong>
-            <p>Заявка подготовлена. Мы свяжемся с тобой по указанному контакту.</p>
+            <p>Заявка отправлена. Мы свяжемся с тобой по указанному номеру или Telegram.</p>
             <button className="pink-btn" type="button" onClick={() => setOpen(false)}>Закрыть</button>
           </div>
         ) : (
           <form className="lead-form" onSubmit={submit}>
-            <label>Имя<input name="name" autoComplete="name" required maxLength="80" /></label>
-            <label>Возраст<input name="age" type="number" inputMode="numeric" min="18" max="99" required /></label>
-            <label>Telegram или телефон<input name="contact" autoComplete="tel" required maxLength="120" /></label>
-            <label>Город / страна<input name="location" autoComplete="address-level2" maxLength="120" /></label>
-            <label>Опыт<textarea name="experience" rows="3" maxLength="600" placeholder="Если опыта нет — можно оставить поле пустым" /></label>
-            <label className="lead-form__consent"><input type="checkbox" required /> <span>Я подтверждаю, что мне исполнилось 18 лет, и соглашаюсь с <a href="/privacy/" target="_blank">политикой конфиденциальности</a>.</span></label>
+            <label>
+              <span>Имя <b>*</b></span>
+              <input ref={firstInputRef} name="name" autoComplete="name" required maxLength="80" placeholder="Как тебя зовут?" />
+            </label>
+            <label>
+              <span>Номер телефона <b>*</b></span>
+              <input name="phone" type="tel" inputMode="tel" autoComplete="tel" required minLength="7" maxLength="30" placeholder="+380 ..." />
+            </label>
+            <label>
+              <span>Telegram</span>
+              <input name="telegram" autoComplete="off" maxLength="80" placeholder="@username" />
+            </label>
+            <label className="lead-form__consent">
+              <input type="checkbox" required />
+              <span>Я подтверждаю, что мне исполнилось 18 лет, и соглашаюсь с <a href="/privacy/" target="_blank" rel="noreferrer">политикой конфиденциальности</a>.</span>
+            </label>
             <button className="pink-btn lead-form__submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Отправляем…' : 'Отправить заявку ↗'}</button>
+            <p className="lead-form__required">* обязательные поля</p>
             {status === 'error' && <p className="lead-form__error">Не удалось отправить заявку. Попробуй ещё раз или напиши на hello@cosmo.agency.</p>}
           </form>
         )}
