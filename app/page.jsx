@@ -1,4 +1,5 @@
 import { ApplicationModal, ApplicationTrigger } from './ApplicationForm';
+import SiteEffects from './SiteEffects';
 
 const ArrowUpRight = () => <span aria-hidden="true">↗</span>;
 
@@ -53,6 +54,7 @@ const faq = [
 
 export default function Home() {
   return <>
+    <SiteEffects />
     <main className="site-frame">
       <section className="hero" id="home">
         <div className="hero__shade" />
