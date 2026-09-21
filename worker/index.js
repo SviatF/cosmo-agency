@@ -60,7 +60,7 @@ async function uploadDocument(env, userId, side, file) {
   if (!allowed.has(file.type)) throw new Error('Unsupported document format');
   const ext = file.name.split('.').pop()?.replace(/[^a-zA-Z0-9]/g, '').toLowerCase() || 'bin';
   const path = `${userId}/${side}-${crypto.randomUUID()}.${ext}`;
-  const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/kyc-documents/${path}`, {
+  const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/cosmo-kyc-documents/${path}`, {
     method: 'POST',
     headers: {
       apikey: env.SUPABASE_SERVICE_ROLE_KEY,
@@ -75,7 +75,7 @@ async function uploadDocument(env, userId, side, file) {
 }
 
 async function insertApplication(env, row) {
-  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/applications`, {
+  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/cosmo_applications`, {
     method: 'POST',
     headers: { ...supabaseHeaders(env), Prefer: 'return=representation' },
     body: JSON.stringify(row),
@@ -186,7 +186,7 @@ async function handleMe(request, env) {
   requireConfig(env, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
   const user = await getCurrentUser(request, env);
   if (!user) return json({ error: 'unauthorized' }, 401);
-  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/applications?user_id=eq.${encodeURIComponent(user.id)}&select=id,status,full_name,email,phone,telegram,country,city,created_at,reviewed_at,review_note&order=created_at.desc&limit=1`, {
+  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/cosmo_applications?user_id=eq.${encodeURIComponent(user.id)}&select=id,status,full_name,email,phone,telegram,country,city,created_at,reviewed_at,review_note&order=created_at.desc&limit=1`, {
     headers: supabaseHeaders(env),
   });
   const rows = await response.json();
@@ -201,7 +201,7 @@ function isAdmin(request, env) {
 async function handleAdminList(request, env) {
   if (!isAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
   requireConfig(env, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
-  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/applications?select=id,status,full_name,date_of_birth,phone,telegram,email,country,city,experience,schedule,languages,document_type,document_front_path,document_back_path,created_at,review_note&order=created_at.desc&limit=100`, { headers: supabaseHeaders(env) });
+  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/cosmo_applications?select=id,status,full_name,date_of_birth,phone,telegram,email,country,city,experience,schedule,languages,document_type,document_front_path,document_back_path,created_at,review_note&order=created_at.desc&limit=100`, { headers: supabaseHeaders(env) });
   return json(await response.json());
 }
 
@@ -211,7 +211,7 @@ async function handleAdminDocument(request, env) {
   const url = new URL(request.url);
   const path = url.searchParams.get('path');
   if (!path || path.includes('..')) return json({ error: 'invalid_path' }, 400);
-  const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/authenticated/kyc-documents/${encodeURI(path)}`, {
+  const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/authenticated/cosmo-kyc-documents/${encodeURI(path)}`, {
     headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}` },
   });
   if (!response.ok) return json({ error: 'document_not_found' }, 404);
@@ -225,7 +225,7 @@ async function handleAdminStatus(request, env, id) {
   if (!isAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
   const { status, review_note = '' } = await request.json();
   if (!['approved', 'rejected', 'needs_changes', 'review'].includes(status)) return json({ error: 'invalid_status' }, 400);
-  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/applications?id=eq.${encodeURIComponent(id)}`, {
+  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/cosmo_applications?id=eq.${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: { ...supabaseHeaders(env), Prefer: 'return=representation' },
     body: JSON.stringify({ status, review_note, reviewed_at: new Date().toISOString() }),
