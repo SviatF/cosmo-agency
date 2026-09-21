@@ -1,6 +1,7 @@
 import { ApplicationModal, ApplicationTrigger } from './ApplicationForm';
 import SiteEffects from './SiteEffects';
 import LanguageSwitcher from './LanguageSwitcher';
+import CosmicStars from './CosmicStars';
 import { getCopy } from './copy';
 
 const ArrowUpRight = () => <span aria-hidden="true">↗</span>;
@@ -40,6 +41,7 @@ export default function CosmoPage({ locale = 'ru' }) {
 
   return <>
     <SiteEffects />
+    <CosmicStars />
     <main className="site-frame" data-locale={locale}>
       <section className="hero" id="home">
         <div className="hero__shade" />
@@ -87,6 +89,7 @@ export default function CosmoPage({ locale = 'ru' }) {
       </section>
 
       <section className="seo-content" id="about">
+        <CosmicStars zone="faq" />
         <div className="seo-content__inner shell">
           <div className="seo-content__about">
             <p className="eyebrow">{t.aboutEyebrow}</p>
