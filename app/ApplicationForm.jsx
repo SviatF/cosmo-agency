@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { getCopy } from './copy';
 
 const OPEN_EVENT = 'cosmo:open-application';
 
@@ -25,7 +26,8 @@ export function ApplicationTrigger({ className = '', children }) {
   );
 }
 
-export function ApplicationModal() {
+export function ApplicationModal({ locale = 'ru' }) {
+  const t = getCopy(locale).form;
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
   const firstInputRef = useRef(null);
@@ -63,6 +65,7 @@ export function ApplicationModal() {
       name: String(data.name || '').trim(),
       phone: String(data.phone || '').trim(),
       telegram: String(data.telegram || '').trim(),
+      locale,
       source: 'cosmo-agency',
       page: typeof window !== 'undefined' ? window.location.href : '',
       submitted_at: new Date().toISOString(),
@@ -77,15 +80,15 @@ export function ApplicationModal() {
         });
         if (!response.ok) throw new Error('Lead endpoint returned an error');
       } else {
-        const subject = encodeURIComponent('Новая заявка — COSMO Agency');
+        const subject = encodeURIComponent('COSMO Agency application');
         const body = encodeURIComponent(
-          `Имя: ${payload.name}\nТелефон: ${payload.phone}\nTelegram: ${payload.telegram || '-'}\nСтраница: ${payload.page}\n`
+          `Name: ${payload.name}\nPhone: ${payload.phone}\nTelegram: ${payload.telegram || '-'}\nLanguage: ${locale}\nPage: ${payload.page}\n`
         );
         window.location.href = `mailto:hello@cosmo.agency?subject=${subject}&body=${body}`;
       }
 
-      track('form_submit', { form_name: 'cosmo_application' });
-      track('lead', { form_name: 'cosmo_application' });
+      track('form_submit', { form_name: 'cosmo_application', locale });
+      track('lead', { form_name: 'cosmo_application', locale });
       setStatus('success');
       form.reset();
     } catch (error) {
@@ -99,38 +102,38 @@ export function ApplicationModal() {
   return (
     <div className="lead-modal" role="dialog" aria-modal="true" aria-labelledby="lead-modal-title" onMouseDown={(e) => e.target === e.currentTarget && setOpen(false)}>
       <div className="lead-modal__panel">
-        <button className="lead-modal__close" type="button" aria-label="Закрыть" onClick={() => setOpen(false)}>×</button>
+        <button className="lead-modal__close" type="button" aria-label={t.close} onClick={() => setOpen(false)}>×</button>
         <p className="eyebrow">COSMO AGENCY</p>
-        <h2 id="lead-modal-title">Оставить заявку</h2>
-        <p className="lead-modal__intro">Оставь контакты — команда COSMO свяжется с тобой и расскажет о следующих шагах.</p>
+        <h2 id="lead-modal-title">{t.title}</h2>
+        <p className="lead-modal__intro">{t.intro}</p>
 
         {status === 'success' ? (
           <div className="lead-modal__success">
-            <strong>Спасибо!</strong>
-            <p>Заявка отправлена. Мы свяжемся с тобой по указанному номеру или Telegram.</p>
-            <button className="pink-btn" type="button" onClick={() => setOpen(false)}>Закрыть</button>
+            <strong>{t.thanks}</strong>
+            <p>{t.success}</p>
+            <button className="pink-btn" type="button" onClick={() => setOpen(false)}>{t.close}</button>
           </div>
         ) : (
           <form className="lead-form" onSubmit={submit}>
             <label>
-              <span>Имя <b>*</b></span>
-              <input ref={firstInputRef} name="name" autoComplete="name" required maxLength="80" placeholder="Как тебя зовут?" />
+              <span>{t.name} <b>*</b></span>
+              <input ref={firstInputRef} name="name" autoComplete="name" required maxLength="80" placeholder={t.namePh} />
             </label>
             <label>
-              <span>Номер телефона <b>*</b></span>
+              <span>{t.phone} <b>*</b></span>
               <input name="phone" type="tel" inputMode="tel" autoComplete="tel" required minLength="7" maxLength="30" placeholder="+380 ..." />
             </label>
             <label>
-              <span>Telegram</span>
+              <span>{t.telegram}</span>
               <input name="telegram" autoComplete="off" maxLength="80" placeholder="@username" />
             </label>
             <label className="lead-form__consent">
               <input type="checkbox" required />
-              <span>Я подтверждаю, что мне исполнилось 18 лет, и соглашаюсь с <a href="/privacy/" target="_blank" rel="noreferrer">политикой конфиденциальности</a>.</span>
+              <span>{t.consent}</span>
             </label>
-            <button className="pink-btn lead-form__submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? 'Отправляем…' : 'Отправить заявку ↗'}</button>
-            <p className="lead-form__required">* обязательные поля</p>
-            {status === 'error' && <p className="lead-form__error">Не удалось отправить заявку. Попробуй ещё раз или напиши на hello@cosmo.agency.</p>}
+            <button className="pink-btn lead-form__submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? t.sending : t.submit}</button>
+            <p className="lead-form__required">{t.required}</p>
+            {status === 'error' && <p className="lead-form__error">{t.error}</p>}
           </form>
         )}
       </div>
