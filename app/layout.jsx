@@ -14,9 +14,9 @@ export const metadata = {
   alternates: { canonical: '/' },
   robots: { index: true, follow: true },
   icons: {
-    icon: '/img/main-logo (1).webp',
-    shortcut: '/img/main-logo (1).webp',
-    apple: '/img/main-logo (1).webp',
+    icon: '/img/cosmo-fav.png',
+    shortcut: '/img/cosmo-fav.png',
+    apple: '/img/cosmo-fav.png',
   },
   openGraph: {
     type: 'website',
