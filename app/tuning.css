@@ -86,13 +86,11 @@ body {
       inset -24px 0 44px -38px rgba(255, 121, 211, .12);
   }
 
-  /* Reference inner margins: 64px each -> 78px each at 1.22x. */
   .shell {
     width: calc(100% - 156px);
     max-width: none;
   }
 
-  /* HERO: 556px reference height -> 678px */
   .hero {
     min-height: 678px;
     height: 678px;
@@ -147,12 +145,11 @@ body {
 
   .platforms { margin-top: 41px; }
   .platforms p { margin-bottom: 11px; font-size: 13px; }
-  .platforms__row { gap: 15px; min-height: 36px; }
-  .platforms__row img { max-height: 34px; }
-  /* Correct PNG marks have almost no transparent padding. */
-  .platforms__row img:nth-child(1) { width: 112px; }
-  .platforms__row img:nth-child(2) { width: 145px; }
-  .platforms__row img:nth-child(3) { width: 118px; }
+  .platforms__row { gap: 15px; min-height: 30px; }
+  .platforms__row img { max-height: 26px; }
+  .platforms__row img:nth-child(1) { width: 84px; }
+  .platforms__row img:nth-child(2) { width: 109px; }
+  .platforms__row img:nth-child(3) { width: 89px; }
   .platforms__row span { font-size: 13px; }
 
   .side-rail {
@@ -164,7 +161,6 @@ body {
   .side-rail span { font-size: 27px; }
   .side-rail p { font-size: 12px; }
 
-  /* BENEFITS: 228px -> 278px */
   .benefits__grid {
     min-height: 278px;
     height: 278px;
@@ -189,7 +185,6 @@ body {
   .benefit h3 { font-size: 19px; }
   .benefit p { font-size: 13px; line-height: 1.55; margin-top: 10px; }
 
-  /* HOW: 546px -> 666px */
   .how {
     min-height: 666px;
     height: 666px;
@@ -242,7 +237,6 @@ body {
   .moon { width: 46px; height: 46px; font-size: 25px; }
 }
 
-/* Normal desktop remains fluid; wide desktop is the strict 1:1 proportional mode above. */
 @media (min-width: 821px) and (max-width: 1239px) {
   body { padding: 0 13px; }
 
@@ -267,9 +261,10 @@ body {
   .hero__copy { font-size: 14px; line-height: 1.5; margin: 18px 0 21px; }
   .pink-btn { min-width: 214px; height: 44px; }
   .platforms { margin-top: 30px; }
-  .platforms__row img:nth-child(1) { width: 104px; }
-  .platforms__row img:nth-child(2) { width: 136px; }
-  .platforms__row img:nth-child(3) { width: 110px; }
+  .platforms__row img { max-height: 24px; }
+  .platforms__row img:nth-child(1) { width: 78px; }
+  .platforms__row img:nth-child(2) { width: 102px; }
+  .platforms__row img:nth-child(3) { width: 83px; }
   .benefits__grid { min-height: 205px; }
   .how { min-height: 500px; }
 }
