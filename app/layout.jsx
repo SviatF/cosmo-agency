@@ -2,6 +2,7 @@ import './globals.css';
 import './tuning.css';
 import './seo.css';
 import './interactions.css';
+import './language.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cosmo-agency.oleg22777.workers.dev';
 const title = 'COSMO Agency — работа на стриминговых платформах';
@@ -11,7 +12,10 @@ export const metadata = {
   metadataBase: new URL(siteUrl),
   title,
   description,
-  alternates: { canonical: '/' },
+  alternates: {
+    canonical: '/ru/',
+    languages: { 'uk-UA': '/ua/', 'ru-RU': '/ru/', en: '/en/' },
+  },
   robots: { index: true, follow: true },
   icons: {
     icon: '/img/cosmo-fav.png',
@@ -21,7 +25,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'ru_RU',
-    url: '/',
+    url: '/ru/',
     siteName: 'COSMO Agency',
     title,
     description,
@@ -52,7 +56,7 @@ const structuredData = {
       '@id': `${siteUrl}/#website`,
       url: siteUrl,
       name: 'COSMO Agency',
-      inLanguage: 'ru',
+      inLanguage: ['ru', 'uk', 'en'],
       publisher: { '@id': `${siteUrl}/#organization` },
     },
   ],
