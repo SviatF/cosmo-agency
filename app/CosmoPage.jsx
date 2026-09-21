@@ -59,11 +59,39 @@ function onboardingSteps(locale) {
   ];
 }
 
+function registrationCopy(locale) {
+  if (locale === 'ua') return {
+    label: 'ПОВНА РЕЄСТРАЦІЯ',
+    title: 'ТВІЙ ПРОФІЛЬ У COSMO',
+    copy: 'Створи особистий кабінет, заповни дані та пройди верифікацію. Після відправлення профіль потрапить менеджеру COSMO на перевірку.',
+    cta: 'Пройти реєстрацію',
+    account: 'Увійти в кабінет',
+    items: ['Особистий кабінет','Перевірка 18+','Приватна верифікація','Підтвердження менеджером'],
+  };
+  if (locale === 'en') return {
+    label: 'FULL REGISTRATION',
+    title: 'YOUR COSMO PROFILE',
+    copy: 'Create your account, complete your details and verification. Once submitted, your profile is sent to a COSMO manager for review.',
+    cta: 'Complete registration',
+    account: 'Open account',
+    items: ['Personal account','18+ verification','Private identity check','Manager approval'],
+  };
+  return {
+    label: 'ПОЛНАЯ РЕГИСТРАЦИЯ',
+    title: 'ТВОЙ ПРОФИЛЬ В COSMO',
+    copy: 'Создай личный кабинет, заполни данные и пройди верификацию. После отправки профиль попадёт менеджеру COSMO на проверку.',
+    cta: 'Пройти регистрацию',
+    account: 'Войти в кабинет',
+    items: ['Личный кабинет','Проверка 18+','Приватная верификация','Подтверждение менеджером'],
+  };
+}
+
 export default function CosmoPage({ locale = 'ru' }) {
   const t = getCopy(locale);
   const base = `/${locale}/`;
   const steps = onboardingSteps(locale);
-  const registerLabel = locale === 'ua' ? 'Реєстрація' : locale === 'en' ? 'Register' : 'Регистрация';
+  const registration = registrationCopy(locale);
+  const registerLabel = registration.cta;
 
   return <>
     <SiteEffects />
@@ -78,6 +106,7 @@ export default function CosmoPage({ locale = 'ru' }) {
           </nav>
           <div className="header__actions">
             <LanguageSwitcher locale={locale} />
+            <a className="header-register-btn" href={`/${locale}/register/`}>{registerLabel} ↗</a>
             <ApplicationTrigger className="outline-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger>
           </div>
         </header>
@@ -86,7 +115,11 @@ export default function CosmoPage({ locale = 'ru' }) {
           <p className="eyebrow">{t.eyebrow}</p>
           <h1>{t.hero1}<br/><em>{t.hero2}</em></h1>
           <p className="hero__copy">{t.heroCopy}</p>
-          <div className="hero__actions"><ApplicationTrigger className="pink-btn">{t.start} <ArrowUpRight /></ApplicationTrigger><a className="text-link" href="#how">{t.learn} <span>↓</span></a></div>
+          <div className="hero__actions">
+            <ApplicationTrigger className="pink-btn">{t.start} <ArrowUpRight /></ApplicationTrigger>
+            <a className="register-hero-btn" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a>
+            <a className="text-link" href="#how">{t.learn} <span>↓</span></a>
+          </div>
           <div className="platforms"><p>{t.platforms}</p><div className="platforms__row"><img src="/img/stripchat-logo (new).png" alt="Stripchat"/><img src="/img/myfreecams-logo (new).png" alt="MyFreeCams"/><img src="/img/chaturbate-logo (new).png" alt="Chaturbate"/><span>{t.others}</span></div></div>
         </div>
 
@@ -105,13 +138,35 @@ export default function CosmoPage({ locale = 'ru' }) {
             <p className="eyebrow">{t.howEyebrow}</p>
             <h2>{t.howTitle1}<br/>{t.howTitle2}</h2>
             <div className="steps steps--five">{steps.map(([num,icon,title,copy]) => <article className="step" key={num}><div className="step__top"><strong>{num}</strong><Icon type={icon}/></div><h3>{multiline(title)}</h3><p>{copy}</p></article>)}</div>
-            <a className="how-register-link" href={`/${locale}/register/`}>{registerLabel} →</a>
+            <a className="how-register-link how-register-link--primary" href={`/${locale}/register/`}>{registerLabel} ↗</a>
           </div>
         </div>
         <div className="footer-zone shell" id="contacts">
           <div className="footer-zone__left">{t.footerWords[0]} <b>•</b> {t.footerWords[1]} <b>•</b> {t.footerWords[2]}</div>
           <div className="footer-zone__center"><PlanetLogo footer/><p>{t.footerTag}</p></div>
-          <div className="footer-zone__right"><ApplicationTrigger className="pink-btn pink-btn--small">{t.join} <ArrowUpRight /></ApplicationTrigger><button className="moon" aria-label="Theme" type="button">◐</button></div>
+          <div className="footer-zone__right"><a className="pink-btn pink-btn--small" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a><button className="moon" aria-label="Theme" type="button">◐</button></div>
+        </div>
+      </section>
+
+      <section className="registration-spotlight" id="registration">
+        <div className="registration-spotlight__orb" aria-hidden="true" />
+        <div className="registration-spotlight__inner shell">
+          <div className="registration-spotlight__copy">
+            <p className="eyebrow">02 / {registration.label}</p>
+            <h2>{registration.title}</h2>
+            <p>{registration.copy}</p>
+            <div className="registration-spotlight__actions">
+              <a className="pink-btn registration-spotlight__cta" href={`/${locale}/register/`}>{registration.cta} <ArrowUpRight /></a>
+              <a className="text-link" href={`/${locale}/account/`}>{registration.account} <span>→</span></a>
+            </div>
+          </div>
+          <div className="registration-spotlight__panel">
+            <div className="registration-spotlight__status"><span>02</span><small>ACCOUNT / VERIFICATION</small><b>READY</b></div>
+            <div className="registration-spotlight__items">
+              {registration.items.map((item, index) => <div key={item}><span>0{index + 1}</span><p>{item}</p><b>✓</b></div>)}
+            </div>
+            <a className="registration-spotlight__panel-cta" href={`/${locale}/register/`}>{registration.cta}<span>↗</span></a>
+          </div>
         </div>
       </section>
 
@@ -122,7 +177,7 @@ export default function CosmoPage({ locale = 'ru' }) {
             <p className="eyebrow">{t.aboutEyebrow}</p>
             <h2>{t.aboutTitle}</h2>
             <p>{t.aboutCopy}</p>
-            <div className="seo-content__actions"><ApplicationTrigger className="pink-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger><a href={`/${locale}/register/`} className="text-link">{registerLabel}</a><a href="mailto:hello@cosmo.agency" className="text-link">hello@cosmo.agency</a></div>
+            <div className="seo-content__actions"><ApplicationTrigger className="pink-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger><a href={`/${locale}/register/`} className="register-inline-cta">{registerLabel} ↗</a><a href="mailto:hello@cosmo.agency" className="text-link">hello@cosmo.agency</a></div>
           </div>
 
           <div className="faq" id="faq">
@@ -136,7 +191,7 @@ export default function CosmoPage({ locale = 'ru' }) {
         <div className="legal-bar shell"><span>18+</span><a href="/privacy/">{t.privacy}</a><a href="/terms/">{t.terms}</a><a href={`/${locale}/account/`}>{locale === 'ua' ? 'Кабінет' : locale === 'en' ? 'Account' : 'Кабинет'}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
       </section>
     </main>
-    <ApplicationTrigger className="mobile-cta">{t.apply} ↗</ApplicationTrigger>
+    <a className="mobile-cta mobile-cta--registration" href={`/${locale}/register/`}>{registerLabel} ↗</a>
     <ApplicationModal locale={locale} />
   </>;
 }
