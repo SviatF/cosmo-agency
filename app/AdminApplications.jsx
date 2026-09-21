@@ -15,6 +15,15 @@ export default function AdminApplications() {
     setRows(await res.json()); setLoading(false);
   }
 
+  async function openDocument(path) {
+    const res = await fetch(`/api/admin/document?path=${encodeURIComponent(path)}`, { headers: { 'x-admin-key': key } });
+    if (!res.ok) { alert('Не удалось открыть документ'); return; }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
   async function update(id, status) {
     const review_note = window.prompt('Комментарий менеджера (необязательно):', '') || '';
     const res = await fetch(`/api/admin/applications/${id}/status`, {
@@ -34,7 +43,8 @@ export default function AdminApplications() {
       <div className="admin-grid">
         {rows.map((row) => <article className="admin-card" key={row.id}>
           <div className="admin-card__top"><div><small>{new Date(row.created_at).toLocaleString()}</small><h2>{row.full_name}</h2></div><span className={`admin-badge admin-badge--${row.status}`}>{row.status}</span></div>
-          <div className="admin-data"><p><span>Возраст</span>{row.date_of_birth}</p><p><span>Телефон</span>{row.phone}</p><p><span>Telegram</span>{row.telegram || '—'}</p><p><span>Email</span>{row.email}</p><p><span>Локация</span>{[row.country,row.city].filter(Boolean).join(', ') || '—'}</p><p><span>Языки</span>{row.languages || '—'}</p></div>
+          <div className="admin-data"><p><span>Дата рождения</span>{row.date_of_birth}</p><p><span>Телефон</span>{row.phone}</p><p><span>Telegram</span>{row.telegram || '—'}</p><p><span>Email</span>{row.email}</p><p><span>Локация</span>{[row.country,row.city].filter(Boolean).join(', ') || '—'}</p><p><span>Языки</span>{row.languages || '—'}</p></div>
+          <div className="admin-documents"><button onClick={() => openDocument(row.document_front_path)}>Документ · FRONT ↗</button><button onClick={() => openDocument(row.document_back_path)}>Документ · BACK ↗</button></div>
           {row.experience && <div className="admin-copy"><span>Опыт</span><p>{row.experience}</p></div>}
           {row.schedule && <div className="admin-copy"><span>График</span><p>{row.schedule}</p></div>}
           {row.review_note && <div className="admin-copy"><span>Комментарий</span><p>{row.review_note}</p></div>}
