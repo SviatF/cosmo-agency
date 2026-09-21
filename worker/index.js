@@ -113,9 +113,8 @@ async function handleRegister(request, env) {
   const age = Math.floor((Date.now() - new Date(dob).getTime()) / 31557600000);
   if (!Number.isFinite(age) || age < 18) return json({ error: 'age_18_required' }, 400);
 
-  let user;
   try {
-    user = await createSupabaseUser(env, email, password, { full_name: fullName, phone });
+    const user = await createSupabaseUser(env, email, password, { full_name: fullName, phone });
     const frontPath = await uploadDocument(env, user.id, 'front', form.get('document_front'));
     const backPath = await uploadDocument(env, user.id, 'back', form.get('document_back'));
     const application = await insertApplication(env, {
@@ -202,8 +201,24 @@ function isAdmin(request, env) {
 async function handleAdminList(request, env) {
   if (!isAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
   requireConfig(env, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
-  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/applications?select=id,status,full_name,date_of_birth,phone,telegram,email,country,city,experience,schedule,languages,created_at,review_note&order=created_at.desc&limit=100`, { headers: supabaseHeaders(env) });
+  const response = await fetch(`${env.SUPABASE_URL}/rest/v1/applications?select=id,status,full_name,date_of_birth,phone,telegram,email,country,city,experience,schedule,languages,document_type,document_front_path,document_back_path,created_at,review_note&order=created_at.desc&limit=100`, { headers: supabaseHeaders(env) });
   return json(await response.json());
+}
+
+async function handleAdminDocument(request, env) {
+  if (!isAdmin(request, env)) return json({ error: 'unauthorized' }, 401);
+  requireConfig(env, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
+  const url = new URL(request.url);
+  const path = url.searchParams.get('path');
+  if (!path || path.includes('..')) return json({ error: 'invalid_path' }, 400);
+  const response = await fetch(`${env.SUPABASE_URL}/storage/v1/object/authenticated/kyc-documents/${encodeURI(path)}`, {
+    headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}` },
+  });
+  if (!response.ok) return json({ error: 'document_not_found' }, 404);
+  const headers = new Headers(response.headers);
+  headers.set('cache-control', 'no-store, private');
+  headers.set('content-security-policy', "default-src 'none'");
+  return new Response(response.body, { status: 200, headers });
 }
 
 async function handleAdminStatus(request, env, id) {
@@ -232,6 +247,7 @@ export default {
       if (request.method === 'POST' && url.pathname === '/api/logout') return json({ ok: true }, 200, { 'set-cookie': 'cosmo_session=; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=0' });
       if (request.method === 'GET' && url.pathname === '/api/me') return handleMe(request, env);
       if (request.method === 'GET' && url.pathname === '/api/admin/applications') return handleAdminList(request, env);
+      if (request.method === 'GET' && url.pathname === '/api/admin/document') return handleAdminDocument(request, env);
       const match = url.pathname.match(/^\/api\/admin\/applications\/([^/]+)\/status$/);
       if (request.method === 'POST' && match) return handleAdminStatus(request, env, match[1]);
       return env.ASSETS.fetch(request);
