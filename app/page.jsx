@@ -1,10 +1,13 @@
 const ArrowUpRight = () => <span aria-hidden="true">↗</span>;
 
-const PlanetLogo = ({ footer = false }) => (
-  <div className={`brand ${footer ? 'brand--footer' : ''}`} aria-label="COSMO Agency">
-    {!footer && <span className="brand__planet" aria-hidden="true"><i /></span>}
+const PlanetLogo = ({ footer = false }) => footer ? (
+  <div className="brand brand--footer" aria-label="COSMO Agency">
     <span className="brand__text">COSMO<small>AGENCY</small></span>
   </div>
+) : (
+  <a className="brand brand--navbar" href="#home" aria-label="COSMO Agency — Главная">
+    <img className="brand__main-logo" src="/img/main-logo (1).webp" alt="COSMO Agency" />
+  </a>
 );
 
 const Icon = ({ type }) => {
