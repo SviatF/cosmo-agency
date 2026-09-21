@@ -1,4 +1,5 @@
 import './globals.css';
+import './tuning.css';
 
 export const metadata = {
   title: 'COSMO Agency',
