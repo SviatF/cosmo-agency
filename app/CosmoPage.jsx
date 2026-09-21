@@ -35,9 +35,35 @@ function multiline(text) {
   return text.split('\n').map((x, i) => <span key={i}>{x}<br/></span>);
 }
 
+function onboardingSteps(locale) {
+  if (locale === 'ua') return [
+    ['01','doc','Залишаєш\nзаявку','Заповнюєш коротку форму, і ми зв’язуємося з тобою.'],
+    ['02','user','Проходиш\nреєстрацію','Створюємо робочий профіль і проходимо обов’язкову верифікацію особи та віку.'],
+    ['03','star','Проходиш\nнавчання','Розбираємо платформу, технічну частину, спілкування та систему заробітку.'],
+    ['04','play','Виходиш\nв ефір','Починаєш працювати самостійно, але з постійною підтримкою команди.'],
+    ['05','bars','Заробляєш\nі розвиваєшся','Набираєш аудиторію, збільшуєш дохід і зростаєш разом із COSMO.'],
+  ];
+  if (locale === 'en') return [
+    ['01','doc','Submit an\napplication','Fill in a short form and our team contacts you.'],
+    ['02','user','Complete\nregistration','Create your work profile and complete the required identity and age verification.'],
+    ['03','star','Complete\ntraining','Learn the platform, technical setup, communication and earning system.'],
+    ['04','play','Go\nlive','Start working independently with continuous support from the team.'],
+    ['05','bars','Earn\nand grow','Build your audience, increase your income and grow together with COSMO.'],
+  ];
+  return [
+    ['01','doc','Оставляешь\nзаявку','Заполняешь короткую форму, и мы связываемся с тобой.'],
+    ['02','user','Проходишь\nрегистрацию','Создаём рабочий профиль и проходим обязательную верификацию личности и возраста.'],
+    ['03','star','Проходишь\nобучение','Разбираемся с платформой, технической частью, общением и системой заработка.'],
+    ['04','play','Выходишь\nв эфир','Начинаешь работать самостоятельно, но с постоянной поддержкой команды.'],
+    ['05','bars','Зарабатываешь\nи развиваешься','Набираешь аудиторию, увеличиваешь доход и растёшь вместе с COSMO.'],
+  ];
+}
+
 export default function CosmoPage({ locale = 'ru' }) {
   const t = getCopy(locale);
   const base = `/${locale}/`;
+  const steps = onboardingSteps(locale);
+  const registerLabel = locale === 'ua' ? 'Реєстрація' : locale === 'en' ? 'Register' : 'Регистрация';
 
   return <>
     <SiteEffects />
@@ -78,7 +104,8 @@ export default function CosmoPage({ locale = 'ru' }) {
           <div className="how__panel">
             <p className="eyebrow">{t.howEyebrow}</p>
             <h2>{t.howTitle1}<br/>{t.howTitle2}</h2>
-            <div className="steps">{t.steps.map(([num,icon,title,copy]) => <article className="step" key={num}><div className="step__top"><strong>{num}</strong><Icon type={icon}/></div><h3>{multiline(title)}</h3><p>{copy}</p></article>)}</div>
+            <div className="steps steps--five">{steps.map(([num,icon,title,copy]) => <article className="step" key={num}><div className="step__top"><strong>{num}</strong><Icon type={icon}/></div><h3>{multiline(title)}</h3><p>{copy}</p></article>)}</div>
+            <a className="how-register-link" href={`/${locale}/register/`}>{registerLabel} →</a>
           </div>
         </div>
         <div className="footer-zone shell" id="contacts">
@@ -95,7 +122,7 @@ export default function CosmoPage({ locale = 'ru' }) {
             <p className="eyebrow">{t.aboutEyebrow}</p>
             <h2>{t.aboutTitle}</h2>
             <p>{t.aboutCopy}</p>
-            <div className="seo-content__actions"><ApplicationTrigger className="pink-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger><a href="mailto:hello@cosmo.agency" className="text-link">hello@cosmo.agency</a></div>
+            <div className="seo-content__actions"><ApplicationTrigger className="pink-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger><a href={`/${locale}/register/`} className="text-link">{registerLabel}</a><a href="mailto:hello@cosmo.agency" className="text-link">hello@cosmo.agency</a></div>
           </div>
 
           <div className="faq" id="faq">
@@ -106,7 +133,7 @@ export default function CosmoPage({ locale = 'ru' }) {
             </div>
           </div>
         </div>
-        <div className="legal-bar shell"><span>18+</span><a href="/privacy/">{t.privacy}</a><a href="/terms/">{t.terms}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
+        <div className="legal-bar shell"><span>18+</span><a href="/privacy/">{t.privacy}</a><a href="/terms/">{t.terms}</a><a href={`/${locale}/account/`}>{locale === 'ua' ? 'Кабінет' : locale === 'en' ? 'Account' : 'Кабинет'}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
       </section>
     </main>
     <ApplicationTrigger className="mobile-cta">{t.apply} ↗</ApplicationTrigger>
