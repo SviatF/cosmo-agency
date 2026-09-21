@@ -37,7 +37,6 @@ function multiline(text) {
 export default function CosmoPage({ locale = 'ru' }) {
   const t = getCopy(locale);
   const base = `/${locale}/`;
-  const legalBase = locale === 'ru' ? '' : `/${locale}`;
 
   return <>
     <SiteEffects />
@@ -104,7 +103,7 @@ export default function CosmoPage({ locale = 'ru' }) {
             </div>
           </div>
         </div>
-        <div className="legal-bar shell"><span>18+</span><a href={`${legalBase}/privacy/`}>{t.privacy}</a><a href={`${legalBase}/terms/`}>{t.terms}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
+        <div className="legal-bar shell"><span>18+</span><a href="/privacy/">{t.privacy}</a><a href="/terms/">{t.terms}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
       </section>
     </main>
     <ApplicationTrigger className="mobile-cta">{t.apply} ↗</ApplicationTrigger>
