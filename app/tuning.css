@@ -1,4 +1,4 @@
-/* Master-reference lock: preserve the 1182px COSMO composition on wide screens */
+/* Master-reference lock: preserve the COSMO composition while presenting it cleanly on wide screens */
 
 body {
   min-height: 100vh;
@@ -10,8 +10,9 @@ body {
 }
 
 @media (min-width: 1240px) {
+  /* No top/bottom frame: the COSMO canvas now touches the viewport vertically. */
   body {
-    padding: 28px 0 34px;
+    padding: 0;
   }
 
   body::before,
@@ -41,18 +42,24 @@ body {
     background: rgba(118, 57, 219, .14);
   }
 
+  /* The previous wide-screen side gutters were ~30% larger.
+     Expanding 1182px -> 1442px reduces each side gutter by exactly ~30%
+     on a 2048px viewport while keeping the framed COSMO presentation. */
   .site-frame {
     position: relative;
     z-index: 1;
-    width: 1182px;
+    width: min(1442px, 100vw);
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid rgba(244, 165, 218, .17);
-    border-radius: 22px;
+    border-left: 1px solid rgba(244, 165, 218, .17);
+    border-right: 1px solid rgba(244, 165, 218, .17);
+    border-top: 0;
+    border-bottom: 0;
+    border-radius: 0;
     background: #05050a;
     box-shadow:
-      0 0 0 1px rgba(255,255,255,.025) inset,
-      0 22px 80px rgba(0,0,0,.58),
+      inset 1px 0 0 rgba(255,255,255,.025),
+      inset -1px 0 0 rgba(255,255,255,.025),
       0 0 72px rgba(211, 78, 188, .08);
   }
 
@@ -61,13 +68,15 @@ body {
     position: absolute;
     z-index: 20;
     inset: 0;
-    border-radius: inherit;
     pointer-events: none;
-    box-shadow: inset 0 0 44px rgba(255, 121, 211, .025);
+    box-shadow:
+      inset 24px 0 44px -38px rgba(255, 121, 211, .12),
+      inset -24px 0 44px -38px rgba(255, 121, 211, .12);
   }
 
+  /* Preserve the reference layout proportions inside the larger presentation. */
   .shell {
-    width: calc(100% - 128px);
+    width: calc(100% - 156px);
     max-width: none;
   }
 
@@ -203,17 +212,20 @@ body {
   .moon { width: 38px; height: 38px; }
 }
 
-/* Keep the framed presentation on normal desktop widths, but scale it fluidly. */
+/* Normal desktop: no vertical outer frame, slimmer side gutters. */
 @media (min-width: 821px) and (max-width: 1239px) {
-  body { padding: 18px; }
+  body { padding: 0 13px; }
 
   .site-frame {
     width: 100%;
     margin: 0 auto;
     overflow: hidden;
-    border: 1px solid rgba(244, 165, 218, .13);
-    border-radius: 18px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.45), 0 0 50px rgba(211,78,188,.06);
+    border-left: 1px solid rgba(244, 165, 218, .13);
+    border-right: 1px solid rgba(244, 165, 218, .13);
+    border-top: 0;
+    border-bottom: 0;
+    border-radius: 0;
+    box-shadow: 0 0 50px rgba(211,78,188,.06);
     background: #05050a;
   }
 
