@@ -6,6 +6,7 @@ import './language.css';
 import './cosmic-stars.css';
 import './onboarding.css';
 import './onboarding-extra.css';
+import './testimonials.css';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cosmo-agency.oleg22777.workers.dev';
 const title = 'COSMO Agency — работа на стриминговых платформах';
