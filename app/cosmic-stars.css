@@ -1,0 +1,127 @@
+.frame-stars,
+.faq-shooting-stars {
+  pointer-events: none;
+  user-select: none;
+}
+
+.frame-stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.frame-stars__side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: max(0px, calc((100vw - 1442px) / 2));
+  overflow: hidden;
+}
+
+.frame-stars__side--left { left: 0; }
+.frame-stars__side--right { right: 0; }
+
+.shooting-star {
+  position: absolute;
+  display: block;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255,255,255,.92), 0 0 18px rgba(242,155,215,.55);
+  opacity: 0;
+}
+
+.shooting-star::after {
+  content: '';
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 80px;
+  height: 1px;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, transparent, rgba(242,155,215,.18), rgba(255,255,255,.88));
+  filter: blur(.1px);
+}
+
+.shooting-star--frame {
+  top: var(--star-top);
+  left: 78%;
+  width: var(--star-size, 1.4px);
+  height: var(--star-size, 1.4px);
+  animation: frameShootingStar var(--star-duration, 7s) linear var(--star-delay, 0s) infinite;
+}
+
+.frame-stars__side--right .shooting-star--frame {
+  left: 28%;
+}
+
+.faq-shooting-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.shooting-star--faq {
+  left: var(--star-left);
+  top: var(--star-top);
+  width: 1.5px;
+  height: 1.5px;
+  animation: faqShootingStar var(--star-duration, 8s) linear var(--star-delay, 0s) infinite;
+}
+
+.shooting-star--faq::after {
+  width: 110px;
+  background: linear-gradient(90deg, transparent, rgba(191,117,255,.12), rgba(245,164,219,.34), rgba(255,255,255,.9));
+}
+
+.seo-content__inner,
+.legal-bar {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes frameShootingStar {
+  0%, 70% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-34deg) scale(.8);
+  }
+  72% { opacity: .95; }
+  82% {
+    opacity: 1;
+    transform: translate3d(-95px, 115px, 0) rotate(-34deg) scale(1);
+  }
+  90%, 100% {
+    opacity: 0;
+    transform: translate3d(-180px, 220px, 0) rotate(-34deg) scale(.9);
+  }
+}
+
+@keyframes faqShootingStar {
+  0%, 74% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-28deg) scale(.75);
+  }
+  76% { opacity: .9; }
+  84% {
+    opacity: 1;
+    transform: translate3d(120px, 82px, 0) rotate(-28deg) scale(1);
+  }
+  93%, 100% {
+    opacity: 0;
+    transform: translate3d(245px, 168px, 0) rotate(-28deg) scale(.85);
+  }
+}
+
+@media (max-width: 1442px) {
+  .frame-stars { display: none; }
+}
+
+@media (max-width: 820px) {
+  .faq-shooting-stars { opacity: .45; }
+  .shooting-star--faq:nth-child(n+4) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shooting-star { animation: none !important; opacity: 0 !important; }
+}
