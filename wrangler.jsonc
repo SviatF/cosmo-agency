@@ -3,6 +3,7 @@
   "name": "cosmo-agency",
   "main": "./worker/index.js",
   "compatibility_date": "2026-09-18",
+  "keep_vars": true,
   "assets": {
     "directory": "./out",
     "binding": "ASSETS",
