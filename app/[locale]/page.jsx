@@ -8,11 +8,10 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export function generateMetadata({ params }) {
-  const locale = params.locale;
+export async function generateMetadata({ params }) {
+  const { locale } = await params;
   if (!locales.includes(locale)) return {};
   const t = getCopy(locale);
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cosmo-agency.oleg22777.workers.dev';
   const title = locale === 'en'
     ? 'COSMO Agency — streaming platform opportunities'
     : locale === 'ua'
@@ -23,14 +22,14 @@ export function generateMetadata({ params }) {
     description: t.heroCopy,
     alternates: {
       canonical: `/${locale}/`,
-      languages: { 'uk-UA': '/ua/', 'ru-RU': '/ru/', 'en': '/en/' },
+      languages: { 'uk-UA': '/ua/', 'ru-RU': '/ru/', en: '/en/' },
     },
     openGraph: { title, description: t.heroCopy, url: `/${locale}/`, locale: locale === 'ua' ? 'uk_UA' : locale === 'ru' ? 'ru_RU' : 'en_US' },
   };
 }
 
-export default function LocalizedHome({ params }) {
-  const locale = params.locale;
+export default async function LocalizedHome({ params }) {
+  const { locale } = await params;
   if (!locales.includes(locale)) notFound();
   return <CosmoPage locale={locale} />;
 }
