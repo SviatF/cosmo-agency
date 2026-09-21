@@ -3,6 +3,7 @@ import SiteEffects from './SiteEffects';
 import LanguageSwitcher from './LanguageSwitcher';
 import CosmicStars from './CosmicStars';
 import Testimonials from './Testimonials';
+import WorkDetails from './WorkDetails';
 import { getCopy } from './copy';
 
 const ArrowUpRight = () => <span aria-hidden="true">↗</span>;
@@ -130,6 +131,8 @@ export default function CosmoPage({ locale = 'ru' }) {
       <section className="benefits" id="benefits"><div className="benefits__grid shell">
         {t.benefits.map(([icon,title,copy]) => <article className="benefit" key={title}><div className="icon-ring"><Icon type={icon}/></div><h3>{multiline(title)}</h3><p>{copy}</p></article>)}
       </div></section>
+
+      <WorkDetails locale={locale} />
 
       <section className="how" id="how">
         <div className="how__shade" />
