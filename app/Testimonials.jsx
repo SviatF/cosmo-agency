@@ -44,47 +44,56 @@ function localizedText(review, locale, index) {
 }
 
 export default function Testimonials({ locale = 'ru' }) {
-  const [active, setActive] = useState(0);
+  const [start, setStart] = useState(0);
   const l = labels[locale] || labels.ru;
-  const reviews = useMemo(() => SOURCE_REVIEWS.map((review, index) => ({ ...review, display: localizedText(review, locale, index) })), [locale]);
+  const reviews = useMemo(() => SOURCE_REVIEWS.map((review, index) => ({ ...review, display: localizedText(review, locale, index), index })), [locale]);
 
   useEffect(() => {
-    const id = window.setInterval(() => setActive((value) => (value + 1) % reviews.length), 9000);
+    const id = window.setInterval(() => setStart((value) => (value + 1) % reviews.length), 11000);
     return () => window.clearInterval(id);
   }, [reviews.length]);
 
-  const review = reviews[active];
+  const visible = Array.from({ length: Math.min(4, reviews.length) }, (_, offset) => reviews[(start + offset) % reviews.length]);
+
   return (
     <section className="testimonials" id="reviews">
       <div className="testimonials__inner shell">
-        <article className="testimonial-card" key={`${locale}-${active}`}>
-          <div className="testimonial-card__top">
-            <span>{l.eyebrow}</span>
-            <div className="testimonial-card__rating" aria-label="5 stars">✦ ✦ ✦ ✦ ✦</div>
+        <div className="testimonials__toolbar">
+          <div>
+            <p className="eyebrow">{locale === 'ua' ? 'ВІДГУКИ ДІВЧАТ' : locale === 'en' ? 'TEAM STORIES' : 'ОТЗЫВЫ ДЕВУШЕК'}</p>
+            <h2>{locale === 'ua' ? 'РЕАЛЬНІ ІСТОРІЇ COSMO' : locale === 'en' ? 'REAL COSMO STORIES' : 'РЕАЛЬНЫЕ ИСТОРИИ COSMO'}</h2>
           </div>
-
-          <div className="testimonial-card__body">
-            <div className="testimonial-card__quote-mark">“</div>
-            <blockquote>{review.display}</blockquote>
+          <div className="testimonials__controls">
+            <span>{String(start + 1).padStart(2, '0')}–{String(Math.min(start + 4, reviews.length)).padStart(2, '0')} / {String(reviews.length).padStart(2, '0')}</span>
+            <button type="button" aria-label="Previous reviews" onClick={() => setStart((start - 1 + reviews.length) % reviews.length)}>←</button>
+            <button type="button" aria-label="Next reviews" onClick={() => setStart((start + 1) % reviews.length)}>→</button>
           </div>
+        </div>
 
-          <div className="testimonial-card__footer">
-            <div className="testimonial-card__person">
-              <div className="testimonial-card__avatar" aria-hidden="true">C</div>
-              <div><strong>{l.person}</strong><small>{l.meta}</small></div>
-            </div>
-            <div className="testimonial-card__right">
-              <div className="testimonial-card__counter"><b>{String(active + 1).padStart(2, '0')}</b><span>/ {String(reviews.length).padStart(2, '0')}</span></div>
-              <div className="testimonial-card__controls">
-                <button type="button" aria-label="Previous review" onClick={() => setActive((active - 1 + reviews.length) % reviews.length)}>←</button>
-                <button type="button" aria-label="Next review" onClick={() => setActive((active + 1) % reviews.length)}>→</button>
+        <div className="testimonials__grid">
+          {visible.map((review, slot) => (
+            <article className="testimonial-card testimonial-card--compact" key={`${locale}-${review.index}-${start}-${slot}`}>
+              <div className="testimonial-card__top">
+                <span>{l.eyebrow}</span>
+                <div className="testimonial-card__rating" aria-label="5 stars">✦ ✦ ✦ ✦ ✦</div>
               </div>
-            </div>
-          </div>
-        </article>
+              <div className="testimonial-card__body">
+                <div className="testimonial-card__quote-mark">“</div>
+                <blockquote>{review.display}</blockquote>
+              </div>
+              <div className="testimonial-card__footer">
+                <div className="testimonial-card__person">
+                  <div className="testimonial-card__avatar" aria-hidden="true">C</div>
+                  <div><strong>{l.person}</strong><small>{l.meta}</small></div>
+                </div>
+                <div className="testimonial-card__counter"><b>{String(review.index + 1).padStart(2, '0')}</b><span>/ {String(reviews.length).padStart(2, '0')}</span></div>
+              </div>
+            </article>
+          ))}
+        </div>
 
         <div className="testimonials__under">
-          <div className="testimonials__dots">{reviews.map((_, index) => <button key={index} className={index === active ? 'active' : ''} aria-label={`Review ${index + 1}`} onClick={() => setActive(index)} />)}</div>
+          <div className="testimonials__dots">{reviews.map((_, index) => <button key={index} className={index === start ? 'active' : ''} aria-label={`Review ${index + 1}`} onClick={() => setStart(index)} />)}</div>
           <div className="testimonials__cta"><span>{l.next}</span><a href={`/${locale}/register/`}>{l.cta} ↗</a></div>
         </div>
       </div>
