@@ -19,11 +19,11 @@
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(circle at calc(76% + (var(--mx, 0) * 5%)) calc(35% + (var(--my, 0) * 4%)), rgba(255, 110, 211, .12), transparent 18%),
-    radial-gradient(circle at calc(52% + (var(--mx, 0) * 4%)) calc(62% + (var(--my, 0) * 3%)), rgba(121, 74, 255, .08), transparent 24%);
+    radial-gradient(circle at 76% 35%, rgba(255, 110, 211, .12), transparent 18%),
+    radial-gradient(circle at 52% 62%, rgba(121, 74, 255, .08), transparent 24%);
   mix-blend-mode: screen;
   opacity: .75;
-  transform: translate3d(calc(var(--mx, 0) * -8px), calc(var(--my, 0) * -6px), 0);
+  transform: translate3d(var(--hero-glow-x, 0px), var(--hero-glow-y, 0px), 0);
   transition: transform .45s ease-out, opacity .3s ease;
 }
 
