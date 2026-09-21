@@ -38,7 +38,7 @@ const steps = [
 ];
 
 export default function Home() {
-  return <main>
+  return <main className="site-frame">
     <section className="hero" id="home">
       <div className="hero__shade" />
       <header className="header shell">
