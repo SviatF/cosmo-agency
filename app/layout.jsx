@@ -1,15 +1,68 @@
 import './globals.css';
 import './tuning.css';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://cosmo-agency.oleg22777.workers.dev';
+const title = 'COSMO Agency — работа на стриминговых платформах';
+const description = 'COSMO Agency — команда, которая помогает зарабатывать на стриминговых платформах, развиваться и чувствовать поддержку на каждом этапе.';
+
 export const metadata = {
-  title: 'COSMO Agency',
-  description: 'COSMO Agency — команда, которая помогает зарабатывать на стриминговых платформах.',
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  alternates: { canonical: '/' },
+  robots: { index: true, follow: true },
+  icons: {
+    icon: '/img/main-logo (1).webp',
+    shortcut: '/img/main-logo (1).webp',
+    apple: '/img/main-logo (1).webp',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'ru_RU',
+    url: '/',
+    siteName: 'COSMO Agency',
+    title,
+    description,
+    images: [{ url: '/img/hero.webp', width: 1600, height: 900, alt: 'COSMO Agency' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title,
+    description,
+    images: ['/img/hero.webp'],
+  },
+};
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'COSMO Agency',
+      url: siteUrl,
+      logo: `${siteUrl}/img/main-logo%20(1).webp`,
+      email: 'hello@cosmo.agency',
+      description,
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
+      name: 'COSMO Agency',
+      inLanguage: 'ru',
+      publisher: { '@id': `${siteUrl}/#organization` },
+    },
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="ru">
-      <body>{children}</body>
+      <body>
+        {children}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
+      </body>
     </html>
   );
 }
