@@ -1,8 +1,13 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "cosmo-agency",
+  "main": "./worker/index.js",
   "compatibility_date": "2026-09-18",
   "assets": {
-    "directory": "./out"
+    "directory": "./out",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"],
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "404-page"
   }
 }
