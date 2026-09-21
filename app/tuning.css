@@ -2,7 +2,15 @@
 
 body {
   min-height: 100vh;
-  background: #000;
+  background-color: #000;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.34) 0 1px, transparent 1.25px),
+    radial-gradient(circle, rgba(241,155,211,.24) 0 1px, transparent 1.2px),
+    radial-gradient(circle at 12% 18%, rgba(214,92,183,.08), transparent 18%),
+    radial-gradient(circle at 88% 72%, rgba(109,68,176,.06), transparent 20%);
+  background-size: 112px 112px, 163px 163px, 100% 100%, 100% 100%;
+  background-position: 19px 27px, 67px 51px, 0 0, 0 0;
+  background-attachment: scroll;
 }
 
 .brand--navbar {
@@ -17,6 +25,24 @@ body {
   width: 164px;
   height: auto;
   object-fit: contain;
+}
+
+.brand--footer {
+  width: 100%;
+  justify-content: center;
+}
+.brand--footer .brand__text {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.brand--footer .brand__text small {
+  width: 100%;
+  margin-left: 0 !important;
+  text-align: center;
+  padding-left: .55em;
 }
 
 @media (min-width: 1240px) {
@@ -191,7 +217,6 @@ body {
   .footer-zone__left b { margin: 0 16px; }
   .footer-zone__center { justify-self: center; min-width: 360px; }
   .brand--footer .brand__text { font-size: 35px; }
-  .brand--footer .brand__text small { margin-left: 39px; }
   .footer-zone__center p { font-size: 12px; margin-top: 17px; }
   .footer-zone__right { justify-self: end; }
   .pink-btn--small { min-width: 226px; height: 49px; font-size: 13px; }
@@ -199,7 +224,7 @@ body {
 }
 
 @media (min-width: 821px) and (max-width: 1239px) {
-  body { padding: 0 13px; background: #000; }
+  body { padding: 0 13px; background-color: #000; }
 
   .site-frame {
     width: 100%;
