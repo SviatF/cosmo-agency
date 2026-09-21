@@ -14,24 +14,23 @@ export default function SiteEffects() {
       el.style.setProperty('--reveal-delay', `${Math.min((index % 6) * 70, 350)}ms`);
     });
 
+    let observer;
     if (reduceMotion) {
       revealTargets.forEach((el) => el.classList.add('is-visible'));
-      return;
+    } else {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -7% 0px' }
+      );
+      revealTargets.forEach((el) => observer.observe(el));
     }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -7% 0px' }
-    );
-
-    revealTargets.forEach((el) => observer.observe(el));
 
     const hero = document.querySelector('.hero');
     const siteFrame = document.querySelector('.site-frame');
@@ -75,14 +74,44 @@ export default function SiteEffects() {
       button.addEventListener('pointerleave', onButtonLeave);
     });
 
+    const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+    const sections = navLinks
+      .map((link) => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const setActiveNav = () => {
+      const y = window.scrollY + Math.min(window.innerHeight * 0.32, 260);
+      let currentId = 'home';
+      sections.forEach((section) => {
+        if (section.offsetTop <= y) currentId = section.id;
+      });
+      navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`));
+    };
+    setActiveNav();
+    window.addEventListener('scroll', setActiveNav, { passive: true });
+
+    const moon = document.querySelector('.moon');
+    const toggleCosmicMode = () => {
+      const enabled = document.body.classList.toggle('cosmo-boost');
+      moon?.setAttribute('aria-pressed', String(enabled));
+      moon?.setAttribute('title', enabled ? 'Уменьшить свечение' : 'Усилить свечение');
+    };
+    if (moon) {
+      moon.setAttribute('aria-pressed', 'false');
+      moon.setAttribute('title', 'Усилить свечение');
+      moon.addEventListener('click', toggleCosmicMode);
+    }
+
     return () => {
-      observer.disconnect();
+      observer?.disconnect();
       hero?.removeEventListener('pointermove', onPointerMove);
       hero?.removeEventListener('pointerleave', onPointerLeave);
       buttons.forEach((button) => {
         button.removeEventListener('pointermove', onButtonMove);
         button.removeEventListener('pointerleave', onButtonLeave);
       });
+      window.removeEventListener('scroll', setActiveNav);
+      moon?.removeEventListener('click', toggleCosmicMode);
     };
   }, []);
 
