@@ -10,10 +10,7 @@ body {
 }
 
 @media (min-width: 1240px) {
-  /* No top/bottom frame: the COSMO canvas now touches the viewport vertically. */
-  body {
-    padding: 0;
-  }
+  body { padding: 0; }
 
   body::before,
   body::after {
@@ -42,9 +39,10 @@ body {
     background: rgba(118, 57, 219, .14);
   }
 
-  /* The previous wide-screen side gutters were ~30% larger.
-     Expanding 1182px -> 1442px reduces each side gutter by exactly ~30%
-     on a 2048px viewport while keeping the framed COSMO presentation. */
+  /* 1182px reference canvas enlarged proportionally to 1442px.
+     1442 / 1182 = 1.220. Every major vertical and typographic
+     measurement below follows that same scale, so the wide-screen
+     version keeps the exact reference aspect instead of looking squashed. */
   .site-frame {
     position: relative;
     z-index: 1;
@@ -74,145 +72,168 @@ body {
       inset -24px 0 44px -38px rgba(255, 121, 211, .12);
   }
 
-  /* Preserve the reference layout proportions inside the larger presentation. */
+  /* Reference inner margins: 64px each -> 78px each at 1.22x. */
   .shell {
     width: calc(100% - 156px);
     max-width: none;
   }
 
+  /* HERO: 556px reference height -> 678px */
   .hero {
-    min-height: 556px;
-    height: 556px;
+    min-height: 678px;
+    height: 678px;
     background-size: cover;
     background-position: center top;
   }
 
   .header {
-    height: 76px;
-    grid-template-columns: 205px 1fr 176px;
-    gap: 20px;
+    height: 93px;
+    grid-template-columns: 250px 1fr 215px;
+    gap: 24px;
   }
 
-  .brand__text { font-size: 26px; }
-  .nav { gap: 24px; font-size: 11px; }
-  .outline-btn { height: 42px; font-size: 11px; }
+  .brand { gap: 18px; }
+  .brand__planet { width: 67px; height: 32px; }
+  .brand__planet::after { top: 12px; height: 2px; }
+  .brand__planet i { width: 10px; height: 10px; left: 27px; top: 9px; }
+  .brand__text { font-size: 32px; }
+  .brand__text small { font-size: 7px; margin-top: 10px; margin-left: 40px; }
+
+  .nav { gap: 29px; font-size: 13px; }
+  .outline-btn { height: 51px; border-radius: 29px; font-size: 13px; }
 
   .hero__content {
-    padding-top: 49px;
+    padding-top: 60px;
     padding-bottom: 0;
   }
 
   .eyebrow {
-    font-size: 10px;
-    margin-bottom: 20px;
+    font-size: 12px;
+    margin-bottom: 24px;
   }
 
   .hero h1 {
-    font-size: 56px;
+    font-size: 68px;
     line-height: .98;
-    max-width: 610px;
+    max-width: 744px;
   }
 
   .hero__copy {
-    font-size: 14px;
+    font-size: 17px;
     line-height: 1.55;
-    margin: 20px 0 24px;
+    margin: 24px 0 29px;
   }
 
-  .hero__actions { gap: 27px; }
+  .hero__actions { gap: 33px; }
 
   .pink-btn {
-    min-width: 205px;
-    height: 46px;
+    min-width: 250px;
+    height: 56px;
+    border-radius: 31px;
+    font-size: 15px;
   }
 
-  .platforms { margin-top: 34px; }
-  .platforms p { margin-bottom: 9px; }
-  .platforms__row { gap: 9px; min-height: 29px; }
-  .platforms__row img { max-height: 30px; }
-  .platforms__row img:nth-child(1) { width: 124px; }
-  .platforms__row img:nth-child(2) { width: 154px; }
-  .platforms__row img:nth-child(3) { width: 125px; }
+  .text-link { font-size: 14px; gap: 17px; }
+  .text-link span { width: 29px; height: 29px; }
+
+  .platforms { margin-top: 41px; }
+  .platforms p { margin-bottom: 11px; font-size: 13px; }
+  .platforms__row { gap: 15px; min-height: 36px; }
+  .platforms__row img { max-height: 34px; }
+  /* Correct PNG marks have almost no transparent padding. */
+  .platforms__row img:nth-child(1) { width: 112px; }
+  .platforms__row img:nth-child(2) { width: 145px; }
+  .platforms__row img:nth-child(3) { width: 118px; }
+  .platforms__row span { font-size: 13px; }
 
   .side-rail {
-    right: 13px;
-    top: 92px;
-    bottom: 38px;
+    right: 16px;
+    top: 112px;
+    bottom: 46px;
+    gap: 21px;
   }
+  .side-rail span { font-size: 27px; }
+  .side-rail p { font-size: 12px; }
 
+  /* BENEFITS: 228px -> 278px */
   .benefits__grid {
-    min-height: 228px;
-    height: 228px;
+    min-height: 278px;
+    height: 278px;
   }
 
   .benefit {
-    padding: 31px 24px 28px 24px;
+    padding: 38px 29px 34px 29px;
   }
 
   .benefit:not(:last-child)::after {
-    top: 31px;
-    bottom: 31px;
+    top: 38px;
+    bottom: 38px;
   }
 
   .icon-ring {
-    width: 42px;
-    height: 42px;
-    margin-bottom: 15px;
+    width: 51px;
+    height: 51px;
+    margin-bottom: 18px;
   }
 
-  .icon-ring svg { width: 23px; height: 23px; }
-  .benefit h3 { font-size: 16px; }
-  .benefit p { font-size: 11px; line-height: 1.55; margin-top: 8px; }
+  .icon-ring svg { width: 28px; height: 28px; }
+  .benefit h3 { font-size: 19px; }
+  .benefit p { font-size: 13px; line-height: 1.55; margin-top: 10px; }
 
+  /* HOW: 546px -> 666px */
   .how {
-    min-height: 546px;
-    height: 546px;
+    min-height: 666px;
+    height: 666px;
     background-size: cover;
     background-position: center center;
   }
 
   .how__content {
     grid-template-columns: 40% 60%;
-    padding-top: 38px;
+    padding-top: 46px;
   }
 
-  .how__panel { padding-left: 31px; }
+  .how__panel { padding-left: 38px; }
 
   .how h2 {
-    font-size: 31px;
+    font-size: 38px;
     line-height: 1.02;
-    margin-bottom: 22px;
+    margin-bottom: 27px;
   }
 
-  .steps {
-    gap: 10px;
-  }
+  .steps { gap: 12px; }
 
   .step {
-    min-height: 176px;
-    height: 176px;
-    padding: 17px 16px 14px;
+    min-height: 215px;
+    height: 215px;
+    padding: 21px 20px 17px;
+    border-radius: 11px;
     background: rgba(8,7,13,.63);
     border-color: rgba(255,255,255,.13);
   }
 
-  .step__top { margin-bottom: 17px; }
-  .step h3 { font-size: 14px; line-height: 1.2; }
-  .step p { font-size: 10px; line-height: 1.5; }
+  .step__top { margin-bottom: 21px; gap: 18px; }
+  .step__top strong { font-size: 28px; }
+  .step__top svg { width: 29px; height: 29px; }
+  .step h3 { font-size: 17px; line-height: 1.2; }
+  .step p { font-size: 12px; line-height: 1.5; margin-top: 10px; }
 
   .footer-zone {
-    bottom: 22px;
+    bottom: 27px;
     grid-template-columns: 1fr 1.1fr 1fr;
-    gap: 20px;
+    gap: 24px;
   }
 
-  .brand--footer .brand__text { font-size: 29px; }
-  .footer-zone__center p { margin-top: 14px; }
-  .pink-btn--small { min-width: 185px; height: 40px; }
-  .moon { width: 38px; height: 38px; }
+  .footer-zone__left { font-size: 11px; padding-bottom: 11px; }
+  .footer-zone__left b { margin: 0 16px; }
+  .brand--footer .brand__text { font-size: 35px; }
+  .brand--footer .brand__text small { margin-left: 39px; }
+  .footer-zone__center p { font-size: 12px; margin-top: 17px; }
+  .pink-btn--small { min-width: 226px; height: 49px; font-size: 13px; }
+  .moon { width: 46px; height: 46px; font-size: 25px; }
 }
 
-/* Normal desktop: no vertical outer frame, slimmer side gutters. */
+/* Normal desktop remains fluid; wide desktop is the strict 1:1 proportional mode above. */
 @media (min-width: 821px) and (max-width: 1239px) {
   body { padding: 0 13px; }
 
@@ -236,9 +257,9 @@ body {
   .hero__copy { font-size: 14px; line-height: 1.5; margin: 18px 0 21px; }
   .pink-btn { min-width: 214px; height: 44px; }
   .platforms { margin-top: 30px; }
-  .platforms__row img:nth-child(1) { width: 138px; }
-  .platforms__row img:nth-child(2) { width: 170px; }
-  .platforms__row img:nth-child(3) { width: 140px; }
+  .platforms__row img:nth-child(1) { width: 104px; }
+  .platforms__row img:nth-child(2) { width: 136px; }
+  .platforms__row img:nth-child(3) { width: 110px; }
   .benefits__grid { min-height: 205px; }
   .how { min-height: 500px; }
 }
