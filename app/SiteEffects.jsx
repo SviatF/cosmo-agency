@@ -6,7 +6,7 @@ export default function SiteEffects() {
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealTargets = document.querySelectorAll(
-      '.hero__content > *, .benefit, .how__panel > .eyebrow, .how__panel > h2, .step, .footer-zone > *, .seo-content__about > *, .faq > *, .faq details'
+      '.hero__content > *, .platforms__row > *, .benefit, .how__panel > .eyebrow, .how__panel > h2, .step, .footer-zone > *, .seo-content__about > *, .faq > *, .faq details'
     );
 
     revealTargets.forEach((el, index) => {
@@ -33,6 +33,8 @@ export default function SiteEffects() {
     }
 
     const hero = document.querySelector('.hero');
+    const how = document.querySelector('.how');
+    const seo = document.querySelector('.seo-content');
 
     const onPointerMove = (event) => {
       if (!hero || window.innerWidth < 821) return;
@@ -76,16 +78,31 @@ export default function SiteEffects() {
       .map((link) => document.querySelector(link.getAttribute('href')))
       .filter(Boolean);
 
-    const setActiveNav = () => {
+    const updateScrollEffects = () => {
       const y = window.scrollY + Math.min(window.innerHeight * 0.32, 260);
       let currentId = 'home';
       sections.forEach((section) => {
         if (section.offsetTop <= y) currentId = section.id;
       });
       navLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`));
+
+      if (!reduceMotion && window.innerWidth > 820) {
+        if (how) {
+          const rect = how.getBoundingClientRect();
+          const progress = Math.max(-1, Math.min(1, (window.innerHeight * 0.5 - rect.top) / window.innerHeight));
+          how.style.setProperty('--how-drift-y', `${progress * 8}px`);
+        }
+        if (seo) {
+          const rect = seo.getBoundingClientRect();
+          const progress = Math.max(-1, Math.min(1, (window.innerHeight * 0.55 - rect.top) / window.innerHeight));
+          seo.style.setProperty('--seo-drift-y', `${progress * 10}px`);
+        }
+      }
     };
-    setActiveNav();
-    window.addEventListener('scroll', setActiveNav, { passive: true });
+
+    updateScrollEffects();
+    window.addEventListener('scroll', updateScrollEffects, { passive: true });
+    window.addEventListener('resize', updateScrollEffects, { passive: true });
 
     const moon = document.querySelector('.moon');
     const toggleCosmicMode = () => {
@@ -99,6 +116,16 @@ export default function SiteEffects() {
       moon.addEventListener('click', toggleCosmicMode);
     }
 
+    const heroPrimary = document.querySelector('.hero__actions .pink-btn');
+    let attentionTimer;
+    let attentionCleanupTimer;
+    if (!reduceMotion && heroPrimary) {
+      attentionTimer = window.setTimeout(() => {
+        heroPrimary.classList.add('attention-pulse');
+        attentionCleanupTimer = window.setTimeout(() => heroPrimary.classList.remove('attention-pulse'), 2200);
+      }, 8000);
+    }
+
     return () => {
       observer?.disconnect();
       hero?.removeEventListener('pointermove', onPointerMove);
@@ -107,8 +134,11 @@ export default function SiteEffects() {
         button.removeEventListener('pointermove', onButtonMove);
         button.removeEventListener('pointerleave', onButtonLeave);
       });
-      window.removeEventListener('scroll', setActiveNav);
+      window.removeEventListener('scroll', updateScrollEffects);
+      window.removeEventListener('resize', updateScrollEffects);
       moon?.removeEventListener('click', toggleCosmicMode);
+      if (attentionTimer) window.clearTimeout(attentionTimer);
+      if (attentionCleanupTimer) window.clearTimeout(attentionCleanupTimer);
     };
   }, []);
 
