@@ -28,6 +28,8 @@ export function ApplicationTrigger({ className = '', children }) {
 
 export function ApplicationModal({ locale = 'ru' }) {
   const t = getCopy(locale).form;
+  const registerLabel = locale === 'ua' ? 'Пройти повну реєстрацію' : locale === 'en' ? 'Complete full registration' : 'Пройти полную регистрацию';
+  const registerHint = locale === 'ua' ? 'Вже готова рухатися далі?' : locale === 'en' ? 'Ready to continue now?' : 'Уже готова двигаться дальше?';
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
   const firstInputRef = useRef(null);
@@ -58,7 +60,6 @@ export function ApplicationModal({ locale = 'ru' }) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = Object.fromEntries(new FormData(form).entries());
-    const endpoint = process.env.NEXT_PUBLIC_LEAD_ENDPOINT;
     setStatus('sending');
 
     const payload = {
@@ -72,20 +73,12 @@ export function ApplicationModal({ locale = 'ru' }) {
     };
 
     try {
-      if (endpoint) {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!response.ok) throw new Error('Lead endpoint returned an error');
-      } else {
-        const subject = encodeURIComponent('COSMO Agency application');
-        const body = encodeURIComponent(
-          `Name: ${payload.name}\nPhone: ${payload.phone}\nTelegram: ${payload.telegram || '-'}\nLanguage: ${locale}\nPage: ${payload.page}\n`
-        );
-        window.location.href = `mailto:hello@cosmo.agency?subject=${subject}&body=${body}`;
-      }
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error('Lead endpoint returned an error');
 
       track('form_submit', { form_name: 'cosmo_application', locale });
       track('lead', { form_name: 'cosmo_application', locale });
@@ -111,7 +104,8 @@ export function ApplicationModal({ locale = 'ru' }) {
           <div className="lead-modal__success">
             <strong>{t.thanks}</strong>
             <p>{t.success}</p>
-            <button className="pink-btn" type="button" onClick={() => setOpen(false)}>{t.close}</button>
+            <a className="pink-btn lead-modal__register" href={`/${locale}/register/`}>{registerLabel} ↗</a>
+            <button className="lead-modal__ghost" type="button" onClick={() => setOpen(false)}>{t.close}</button>
           </div>
         ) : (
           <form className="lead-form" onSubmit={submit}>
@@ -134,6 +128,7 @@ export function ApplicationModal({ locale = 'ru' }) {
             <button className="pink-btn lead-form__submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? t.sending : t.submit}</button>
             <p className="lead-form__required">{t.required}</p>
             {status === 'error' && <p className="lead-form__error">{t.error}</p>}
+            <div className="lead-form__register"><span>{registerHint}</span><a href={`/${locale}/register/`}>{registerLabel} →</a></div>
           </form>
         )}
       </div>
