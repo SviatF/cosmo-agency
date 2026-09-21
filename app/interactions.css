@@ -118,7 +118,7 @@
 
 .lead-modal { animation: modalBackdropIn .28s ease both; }
 .lead-modal__panel {
-  overflow: hidden;
+  overflow: auto;
   animation: modalPanelIn .42s cubic-bezier(.18,.88,.32,1.18) both;
 }
 .lead-modal__panel::before {
@@ -170,6 +170,7 @@ body.cosmo-boost .moon {
 @keyframes modalOrb { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-28px, 24px) scale(1.14); } }
 
 @media (max-width: 820px) {
+  body { padding-bottom: 78px !important; }
   .hero {
     min-height: 720px !important;
     background-position: 62% top !important;
