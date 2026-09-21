@@ -2,11 +2,7 @@
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 12% 16%, rgba(126, 44, 151, .18), transparent 27%),
-    radial-gradient(circle at 88% 18%, rgba(255, 79, 196, .12), transparent 24%),
-    radial-gradient(circle at 50% 92%, rgba(104, 48, 176, .13), transparent 31%),
-    linear-gradient(180deg, #040409 0%, #08040d 48%, #040409 100%);
+  background: #000;
 }
 
 .brand--navbar {
@@ -28,62 +24,25 @@ body {
 
   body::before,
   body::after {
-    content: '';
-    position: fixed;
-    z-index: 0;
-    pointer-events: none;
-    border-radius: 999px;
-    filter: blur(42px);
-    opacity: .33;
+    display: none;
+    content: none;
   }
 
-  body::before {
-    width: 330px;
-    height: 330px;
-    left: -105px;
-    top: 14%;
-    background: rgba(194, 68, 203, .17);
-  }
-
-  body::after {
-    width: 390px;
-    height: 390px;
-    right: -135px;
-    bottom: 7%;
-    background: rgba(118, 57, 219, .14);
-  }
-
-  /* 1182px reference canvas enlarged proportionally to 1442px.
-     1442 / 1182 = 1.220. Every major vertical and typographic
-     measurement below follows that same scale, so the wide-screen
-     version keeps the exact reference aspect instead of looking squashed. */
   .site-frame {
     position: relative;
     z-index: 1;
     width: min(1442px, 100vw);
     margin: 0 auto;
     overflow: hidden;
-    border-left: 1px solid rgba(244, 165, 218, .17);
-    border-right: 1px solid rgba(244, 165, 218, .17);
-    border-top: 0;
-    border-bottom: 0;
+    border: 0;
     border-radius: 0;
     background: #05050a;
-    box-shadow:
-      inset 1px 0 0 rgba(255,255,255,.025),
-      inset -1px 0 0 rgba(255,255,255,.025),
-      0 0 72px rgba(211, 78, 188, .08);
+    box-shadow: none;
   }
 
   .site-frame::before {
-    content: '';
-    position: absolute;
-    z-index: 20;
-    inset: 0;
-    pointer-events: none;
-    box-shadow:
-      inset 24px 0 44px -38px rgba(255, 121, 211, .12),
-      inset -24px 0 44px -38px rgba(255, 121, 211, .12);
+    display: none;
+    content: none;
   }
 
   .shell {
@@ -238,18 +197,15 @@ body {
 }
 
 @media (min-width: 821px) and (max-width: 1239px) {
-  body { padding: 0 13px; }
+  body { padding: 0 13px; background: #000; }
 
   .site-frame {
     width: 100%;
     margin: 0 auto;
     overflow: hidden;
-    border-left: 1px solid rgba(244, 165, 218, .13);
-    border-right: 1px solid rgba(244, 165, 218, .13);
-    border-top: 0;
-    border-bottom: 0;
+    border: 0;
     border-radius: 0;
-    box-shadow: 0 0 50px rgba(211,78,188,.06);
+    box-shadow: none;
     background: #05050a;
   }
 
@@ -270,7 +226,7 @@ body {
 }
 
 @media (max-width: 820px) {
-  body { padding: 0; }
+  body { padding: 0; background: #000; }
   .site-frame { width: 100%; margin: 0; border: 0; border-radius: 0; overflow: hidden; }
   .brand__main-logo { width: 138px; }
 }
