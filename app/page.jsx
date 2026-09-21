@@ -54,7 +54,7 @@ export default function Home() {
         <h1>ТВОЯ ВСЕЛЕННАЯ<br/><em>ВОЗМОЖНОСТЕЙ</em></h1>
         <p className="hero__copy">Cosmo Agency — это команда, которая помогает<br className="desktop"/> зарабатывать на стриминговых платформах,<br className="desktop"/> развиваться и чувствовать поддержку на каждом этапе.</p>
         <div className="hero__actions"><a className="pink-btn" href="#contacts">Начать сейчас <ArrowUpRight /></a><a className="text-link" href="#how">Узнать больше <span>↓</span></a></div>
-        <div className="platforms"><p>Мы работаем с ведущими платформами:</p><div className="platforms__row"><img src="/img/stripchat-logo.webp" alt="Stripchat"/><img src="/img/myfreecams-logo.webp" alt="MyFreeCams"/><img src="/img/chaturbate-logo.webp" alt="Chaturbate"/><span>и другими</span></div></div>
+        <div className="platforms"><p>Мы работаем с ведущими платформами:</p><div className="platforms__row"><img src="/img/stripchat-logo (new).png" alt="Stripchat"/><img src="/img/myfreecams-logo (new).png" alt="MyFreeCams"/><img src="/img/chaturbate-logo (new).png" alt="Chaturbate"/><span>и другими</span></div></div>
       </div>
 
       <div className="side-rail" aria-hidden="true"><span>✦</span><p>DREAM　•　STREAM　•　EARN　•　GROW</p></div>
