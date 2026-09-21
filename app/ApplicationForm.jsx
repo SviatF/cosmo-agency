@@ -28,8 +28,13 @@ export function ApplicationTrigger({ className = '', children }) {
 
 export function ApplicationModal({ locale = 'ru' }) {
   const t = getCopy(locale).form;
-  const registerLabel = locale === 'ua' ? 'Пройти повну реєстрацію' : locale === 'en' ? 'Complete full registration' : 'Пройти полную регистрацию';
-  const registerHint = locale === 'ua' ? 'Вже готова рухатися далі?' : locale === 'en' ? 'Ready to continue now?' : 'Уже готова двигаться дальше?';
+  const registerLabel = locale === 'ua' ? 'Пройти повну реєстрацію' : locale === 'en' ? 'Complete registration' : 'Пройти полную регистрацию';
+  const registerHint = locale === 'ua' ? 'Готова перейти до наступного етапу?' : locale === 'en' ? 'Ready for the next step?' : 'Готова перейти к следующему этапу?';
+  const registerNote = locale === 'ua'
+    ? 'Створи особистий кабінет, пройди верифікацію та надішли профіль менеджеру на підтвердження.'
+    : locale === 'en'
+      ? 'Create your account, complete verification and send your profile for manager approval.'
+      : 'Создай личный кабинет, пройди верификацию и отправь профиль менеджеру на подтверждение.';
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState('idle');
   const firstInputRef = useRef(null);
@@ -104,7 +109,12 @@ export function ApplicationModal({ locale = 'ru' }) {
           <div className="lead-modal__success">
             <strong>{t.thanks}</strong>
             <p>{t.success}</p>
-            <a className="pink-btn lead-modal__register" href={`/${locale}/register/`}>{registerLabel} ↗</a>
+            <div className="lead-modal__registration-card">
+              <span>02 / REGISTRATION</span>
+              <b>{registerLabel}</b>
+              <p>{registerNote}</p>
+              <a className="pink-btn lead-modal__register" href={`/${locale}/register/`}>{registerLabel} ↗</a>
+            </div>
             <button className="lead-modal__ghost" type="button" onClick={() => setOpen(false)}>{t.close}</button>
           </div>
         ) : (
@@ -121,14 +131,15 @@ export function ApplicationModal({ locale = 'ru' }) {
               <span>{t.telegram}</span>
               <input name="telegram" autoComplete="off" maxLength="80" placeholder="@username" />
             </label>
-            <label className="lead-form__consent">
-              <input type="checkbox" required />
-              <span>{t.consent}</span>
-            </label>
             <button className="pink-btn lead-form__submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? t.sending : t.submit}</button>
             <p className="lead-form__required">{t.required}</p>
             {status === 'error' && <p className="lead-form__error">{t.error}</p>}
-            <div className="lead-form__register"><span>{registerHint}</span><a href={`/${locale}/register/`}>{registerLabel} →</a></div>
+            <a className="lead-form__register-card" href={`/${locale}/register/`}>
+              <span>02 / REGISTRATION</span>
+              <strong>{registerHint}</strong>
+              <b>{registerLabel} ↗</b>
+              <small>{registerNote}</small>
+            </a>
           </form>
         )}
       </div>
