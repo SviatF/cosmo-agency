@@ -33,22 +33,19 @@ export default function SiteEffects() {
     }
 
     const hero = document.querySelector('.hero');
-    const siteFrame = document.querySelector('.site-frame');
 
     const onPointerMove = (event) => {
       if (!hero || window.innerWidth < 821) return;
       const rect = hero.getBoundingClientRect();
       const x = (event.clientX - rect.left) / rect.width - 0.5;
       const y = (event.clientY - rect.top) / rect.height - 0.5;
-      hero.style.setProperty('--mx', x.toFixed(3));
-      hero.style.setProperty('--my', y.toFixed(3));
-      siteFrame?.style.setProperty('--frame-x', `${x * 10}px`);
+      hero.style.setProperty('--hero-glow-x', `${x * -12}px`);
+      hero.style.setProperty('--hero-glow-y', `${y * -9}px`);
     };
 
     const onPointerLeave = () => {
-      hero?.style.setProperty('--mx', '0');
-      hero?.style.setProperty('--my', '0');
-      siteFrame?.style.setProperty('--frame-x', '0px');
+      hero?.style.setProperty('--hero-glow-x', '0px');
+      hero?.style.setProperty('--hero-glow-y', '0px');
     };
 
     hero?.addEventListener('pointermove', onPointerMove);
