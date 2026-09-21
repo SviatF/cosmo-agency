@@ -118,6 +118,7 @@ export default function Home() {
         <div className="legal-bar shell"><span>18+</span><a href="/privacy/">Политика конфиденциальности</a><a href="/terms/">Условия использования</a><a href="mailto:hello@cosmo.agency">Контакты</a></div>
       </section>
     </main>
+    <ApplicationTrigger className="mobile-cta">Оставить заявку ↗</ApplicationTrigger>
     <ApplicationModal />
   </>;
 }
