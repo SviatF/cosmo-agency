@@ -80,7 +80,6 @@ async function handleRegister(request, env) {
   if (!EMAIL_RE.test(email)) return json({error:'invalid_email'},400);
   if (password.length<8) return json({error:'weak_password'},400);
   if (!DOCUMENT_TYPES.has(documentType)) return json({error:'invalid_document_type'},400);
-  if (String(form.get('consent'))!=='true') return json({error:'consent_required'},400);
   const front=form.get('document_front'); const back=form.get('document_back'); const selfie=form.get('document_selfie');
   if (!(front instanceof File) || !front.size) return json({error:'document_front_required'},400);
   if (documentType!=='foreign_passport' && (!(back instanceof File) || !back.size)) return json({error:'document_back_required'},400);
