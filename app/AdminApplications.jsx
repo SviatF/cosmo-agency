@@ -24,7 +24,7 @@ export default function AdminApplications(){
   const [selected,setSelected]=useState(null);
   const [note,setNote]=useState('');
 
-  useEffect(()=>{const saved=sessionStorage.getItem('cosmo_admin_key');if(saved)setKey(saved);},[]);
+  useEffect(()=>{const saved=sessionStorage.getItem('cosmo_admin_key');if(saved){setKey(saved);authorize(saved);}},[]);
 
   async function authorize(candidate=key){
     if(!candidate)return;
@@ -34,6 +34,8 @@ export default function AdminApplications(){
     const data=await res.json();
     sessionStorage.setItem('cosmo_admin_key',candidate);
     setRows(data);setAuthorized(true);setLoading(false);
+    const applicationId=new URLSearchParams(window.location.search).get('application');
+    if(applicationId){const target=data.find(row=>row.id===applicationId);if(target){setView('all');setSelected(target);setNote(target.review_note||'');}}
   }
 
   async function load(){if(!authorized)return authorize();setLoading(true);const res=await fetch('/api/admin/applications',{headers:{'x-admin-key':key}});if(res.ok)setRows(await res.json());else{setAuthorized(false);sessionStorage.removeItem('cosmo_admin_key');}setLoading(false);}
@@ -89,7 +91,7 @@ export default function AdminApplications(){
 
       {view==='settings'&&<div className="crm-settings-grid">
         <section className="crm-panel"><span>ACCESS</span><h2>Manager access</h2><p>CRM защищена runtime secret <code>ADMIN_ACCESS_KEY</code>. Ключ хранится только в текущей browser session.</p><button onClick={logout}>Завершить сессию</button></section>
-        <section className="crm-panel"><span>TELEGRAM</span><h2>Registration alerts</h2><p>В приватную Telegram-группу отправляется уведомление о новой регистрации и ссылка на CRM. Файлы документов остаются в private storage.</p></section>
+        <section className="crm-panel"><span>TELEGRAM</span><h2>Registration alerts</h2><p>После полной регистрации бот отправляет данные анкеты и прямую кнопку на конкретную заявку в CRM. Документы открываются уже внутри защищённой CRM.</p></section>
         <section className="crm-panel"><span>DATA</span><h2>Private KYC storage</h2><p>Документы доступны через защищённый admin API и не публикуются как открытые URL.</p></section>
       </div>}
     </section>
