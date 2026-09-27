@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import DocumentExamples from './DocumentExamples';
+import CodewordVerification from './CodewordVerification';
 
 const copy = {
   ru: {
@@ -10,9 +11,10 @@ const copy = {
     name:'Имя и фамилия', dob:'Дата рождения', phone:'Номер телефона', telegram:'Telegram', country:'Страна', city:'Город', experience:'Опыт', schedule:'Желаемый график', languages:'Языки', email:'Email', password:'Пароль',
     acceptedDocs:'Подходящие для регистрации документы: ID-карта, загранпаспорт, водительское удостоверение.', chooseDocTitle:'Выбери документ для подтверждения личности', chooseDocCopy:'На следующем экране мы покажем примеры правильных фото именно для выбранного документа.',
     docOptions:[['id_card','ID-карта'],['foreign_passport','Загранпаспорт'],['driver_license','Водительское удостоверение']], front:'Фото документа — лицевая сторона', backDoc:'Фото документа — обратная сторона', passportPhoto:'Фото загранпаспорта', selfie:'Селфи с документом',
+    codewordUpload:'Фото с документом и кодовым словом COSMO',
     expPh:'Коротко расскажи, был ли опыт на стриминговых платформах', schedulePh:'Например: 5 дней в неделю, вечер', langPh:'Например: русский, украинский, английский', passHint:'Минимум 8 символов. Этот пароль будет использоваться для входа в личный кабинет.',
     privacy:'Ваши документы защищены и остаются конфиденциальными', reviewTitle:'Аккаунт отправлен на проверку', reviewCopy:'Менеджер COSMO проверит данные и подтвердит аккаунт. Статус можно отслеживать в личном кабинете.', account:'Открыть личный кабинет', error:'Не удалось завершить регистрацию. Проверь данные и попробуй ещё раз.',
-    errs:{name:'Укажи корректные имя и фамилию.',dob:'Укажи корректную дату рождения. Регистрация доступна только с 18 лет.',phone:'Укажи корректный номер телефона в международном формате.',telegram:'Telegram должен быть в формате @username.',country:'Укажи страну.',city:'Укажи город.',email:'Укажи корректный email.',password:'Пароль должен содержать минимум 8 символов.',front:'Загрузи лицевую сторону документа.',back:'Загрузи обратную сторону документа.',selfie:'Загрузи селфи с документом.',file:'JPG, PNG, WEBP или PDF до 8 MB.'}
+    errs:{name:'Укажи корректные имя и фамилию.',dob:'Укажи корректную дату рождения. Регистрация доступна только с 18 лет.',phone:'Укажи корректный номер телефона в международном формате.',telegram:'Telegram должен быть в формате @username.',country:'Укажи страну.',city:'Укажи город.',email:'Укажи корректный email.',password:'Пароль должен содержать минимум 8 символов.',front:'Загрузи лицевую сторону документа.',back:'Загрузи обратную сторону документа.',selfie:'Загрузи селфи с документом.',codeword:'Загрузи фото с документом и листком с кодовым словом COSMO.',file:'JPG, PNG, WEBP или PDF до 8 MB.',imageFile:'JPG, PNG или WEBP до 8 MB.'}
   },
   ua: {
     back:'Назад на сайт', title:'Реєстрація в COSMO', intro:'Створи робочий профіль і пройди обов’язкову верифікацію особи та віку.',
@@ -20,9 +22,10 @@ const copy = {
     name:'Ім’я та прізвище', dob:'Дата народження', phone:'Номер телефону', telegram:'Telegram', country:'Країна', city:'Місто', experience:'Досвід', schedule:'Бажаний графік', languages:'Мови', email:'Email', password:'Пароль',
     acceptedDocs:'Документи, що підходять для реєстрації: ID-картка, закордонний паспорт, посвідчення водія.', chooseDocTitle:'Обери документ для підтвердження особи', chooseDocCopy:'На наступному екрані ми покажемо приклади правильних фото саме для обраного документа.',
     docOptions:[['id_card','ID-картка'],['foreign_passport','Закордонний паспорт'],['driver_license','Посвідчення водія']], front:'Фото документа — лицьова сторона', backDoc:'Фото документа — зворотна сторона', passportPhoto:'Фото закордонного паспорта', selfie:'Селфі з документом',
+    codewordUpload:'Фото з документом і кодовим словом COSMO',
     expPh:'Коротко розкажи, чи був досвід на стримінгових платформах', schedulePh:'Наприклад: 5 днів на тиждень, вечір', langPh:'Наприклад: українська, російська, англійська', passHint:'Мінімум 8 символів. Цей пароль використовуватиметься для входу в особистий кабінет.',
     privacy:'Ваші документи захищені та залишаються конфіденційними', reviewTitle:'Акаунт надіслано на перевірку', reviewCopy:'Менеджер COSMO перевірить дані та підтвердить акаунт. Статус можна відстежувати в особистому кабінеті.', account:'Відкрити особистий кабінет', error:'Не вдалося завершити реєстрацію. Перевір дані та спробуй ще раз.',
-    errs:{name:'Вкажи коректні ім’я та прізвище.',dob:'Вкажи коректну дату народження. Реєстрація доступна лише з 18 років.',phone:'Вкажи коректний номер телефону у міжнародному форматі.',telegram:'Telegram має бути у форматі @username.',country:'Вкажи країну.',city:'Вкажи місто.',email:'Вкажи коректний email.',password:'Пароль має містити щонайменше 8 символів.',front:'Завантаж лицьову сторону документа.',back:'Завантаж зворотну сторону документа.',selfie:'Завантаж селфі з документом.',file:'JPG, PNG, WEBP або PDF до 8 MB.'}
+    errs:{name:'Вкажи коректні ім’я та прізвище.',dob:'Вкажи коректну дату народження. Реєстрація доступна лише з 18 років.',phone:'Вкажи коректний номер телефону у міжнародному форматі.',telegram:'Telegram має бути у форматі @username.',country:'Вкажи країну.',city:'Вкажи місто.',email:'Вкажи коректний email.',password:'Пароль має містити щонайменше 8 символів.',front:'Завантаж лицьову сторону документа.',back:'Завантаж зворотну сторону документа.',selfie:'Завантаж селфі з документом.',codeword:'Завантаж фото з документом і листком із кодовим словом COSMO.',file:'JPG, PNG, WEBP або PDF до 8 MB.',imageFile:'JPG, PNG або WEBP до 8 MB.'}
   },
   en: {
     back:'Back to site', title:'Register with COSMO', intro:'Create your work profile and complete the required identity and age verification.',
@@ -30,9 +33,10 @@ const copy = {
     name:'Full name', dob:'Date of birth', phone:'Phone number', telegram:'Telegram', country:'Country', city:'City', experience:'Experience', schedule:'Preferred schedule', languages:'Languages', email:'Email', password:'Password',
     acceptedDocs:'Accepted registration documents: ID card, international passport, driver’s license.', chooseDocTitle:'Choose a document to verify your identity', chooseDocCopy:'On the next screen we’ll show the correct photo examples for the document you select.',
     docOptions:[['id_card','ID card'],['foreign_passport','International passport'],['driver_license','Driver’s license']], front:'Document photo — front side', backDoc:'Document photo — back side', passportPhoto:'International passport photo', selfie:'Selfie with document',
+    codewordUpload:'Photo with document and COSMO code word',
     expPh:'Briefly describe any previous streaming-platform experience', schedulePh:'For example: 5 days a week, evenings', langPh:'For example: English, Ukrainian, Russian', passHint:'Minimum 8 characters. You will use this password to sign in to your account.',
     privacy:'Your documents are protected and remain confidential', reviewTitle:'Your account is under review', reviewCopy:'A COSMO manager will review your information and approve the account. You can track the status in your personal account.', account:'Open my account', error:'Registration could not be completed. Check your details and try again.',
-    errs:{name:'Enter your real first and last name.',dob:'Enter a valid date of birth. Registration is 18+ only.',phone:'Enter a valid international phone number.',telegram:'Telegram must look like @username.',country:'Enter your country.',city:'Enter your city.',email:'Enter a valid email address.',password:'Password must be at least 8 characters.',front:'Upload the front of your document.',back:'Upload the back of your document.',selfie:'Upload a selfie with your document.',file:'JPG, PNG, WEBP or PDF up to 8 MB.'}
+    errs:{name:'Enter your real first and last name.',dob:'Enter a valid date of birth. Registration is 18+ only.',phone:'Enter a valid international phone number.',telegram:'Telegram must look like @username.',country:'Enter your country.',city:'Enter your city.',email:'Enter a valid email address.',password:'Password must be at least 8 characters.',front:'Upload the front of your document.',back:'Upload the back of your document.',selfie:'Upload a selfie with your document.',codeword:'Upload a photo holding your document and a sheet with the COSMO code word.',file:'JPG, PNG, WEBP or PDF up to 8 MB.',imageFile:'JPG, PNG or WEBP up to 8 MB.'}
   }
 };
 
@@ -40,11 +44,13 @@ const NAME_RE=/^[\p{L}][\p{L}'’ -]{1,78}$/u;
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const TG_RE=/^@[A-Za-z0-9_]{5,32}$/;
 const FILE_TYPES=new Set(['image/jpeg','image/png','image/webp','application/pdf']);
+const IMAGE_TYPES=new Set(['image/jpeg','image/png','image/webp']);
 const MAX_FILE=8*1024*1024;
 
 function validPhone(value){const digits=String(value||'').replace(/\D/g,'');return /^\+?[\d\s().-]+$/.test(value)&&digits.length>=8&&digits.length<=15&&!/^(\d)\1{7,}$/.test(digits)}
 function validDob(value){const d=new Date(value);if(!value||Number.isNaN(d.getTime()))return false;const y=d.getUTCFullYear();if(y<1950)return false;const now=new Date();let age=now.getUTCFullYear()-y;const md=now.getUTCMonth()-d.getUTCMonth();if(md<0||(md===0&&now.getUTCDate()<d.getUTCDate()))age--;return age>=18&&d<=now}
 function validateFile(file){return file&&file.size>0&&file.size<=MAX_FILE&&FILE_TYPES.has(file.type)}
+function validateImage(file){return file&&file.size>0&&file.size<=MAX_FILE&&IMAGE_TYPES.has(file.type)}
 const Input=({label,error,...props})=><label className={`reg-field ${error?'is-error':''}`}><span>{label}</span><input {...props}/>{error&&<small className="reg-field__error">{error}</small>}</label>;
 
 export default function RegistrationWizard({locale='ru'}){
@@ -55,29 +61,42 @@ export default function RegistrationWizard({locale='ru'}){
   const [error,setError]=useState('');
   const [errors,setErrors]=useState({});
   const [form,setForm]=useState({full_name:'',date_of_birth:'',phone:'',telegram:'',country:'',city:'',experience:'',schedule:'',languages:'',email:'',password:'',document_type:'id_card'});
-  const [files,setFiles]=useState({document_front:null,document_back:null,document_selfie:null});
+  const [files,setFiles]=useState({document_front:null,document_back:null,document_selfie:null,document_codeword_selfie:null});
   const progress=useMemo(()=>((step+1)/t.steps.length)*100,[step,t.steps.length]);
   const isPassport=form.document_type==='foreign_passport';
   const selectedDocLabel=t.docOptions.find(([value])=>value===form.document_type)?.[1]||t.docOptions[0][1];
 
   const setValue=(key)=>(e)=>{setForm(p=>({...p,[key]:e.target.value}));setErrors(p=>({...p,[key]:''}))};
-  const chooseDocument=(value)=>{setForm(p=>({...p,document_type:value}));setFiles({document_front:null,document_back:null,document_selfie:null});setErrors({})};
-  const pickFile=(key)=>(e)=>{const file=e.target.files?.[0]||null;setFiles(p=>({...p,[key]:file}));setErrors(p=>({...p,[key]:file&&validateFile(file)?'':(file?t.errs.file:'')}))};
+  const chooseDocument=(value)=>{setForm(p=>({...p,document_type:value}));setFiles({document_front:null,document_back:null,document_selfie:null,document_codeword_selfie:null});setErrors({})};
+  const pickFile=(key,imageOnly=false)=>(e)=>{const file=e.target.files?.[0]||null;const valid=imageOnly?validateImage(file):validateFile(file);setFiles(p=>({...p,[key]:file}));setErrors(p=>({...p,[key]:file&&valid?'':(file?(imageOnly?t.errs.imageFile:t.errs.file):'')}))};
+
+  const validateBaseDocuments=()=>{
+    const e={};
+    if(!validateFile(files.document_front))e.document_front=files.document_front?t.errs.file:t.errs.front;
+    if(!isPassport&&!validateFile(files.document_back))e.document_back=files.document_back?t.errs.file:t.errs.back;
+    if(!validateImage(files.document_selfie))e.document_selfie=files.document_selfie?t.errs.imageFile:t.errs.selfie;
+    setErrors(e);return Object.keys(e).length===0;
+  };
+
+  const validateCodeword=()=>{
+    const e={};
+    if(!validateImage(files.document_codeword_selfie))e.document_codeword_selfie=files.document_codeword_selfie?t.errs.imageFile:t.errs.codeword;
+    setErrors(e);return Object.keys(e).length===0;
+  };
 
   const checkStep=(s=step)=>{
     const e={};
     if(s===0){if(!NAME_RE.test(form.full_name.trim())||form.full_name.trim().split(/\s+/).length<2)e.full_name=t.errs.name;if(!validDob(form.date_of_birth))e.date_of_birth=t.errs.dob;if(!validPhone(form.phone))e.phone=t.errs.phone;if(form.telegram&&!TG_RE.test(form.telegram.trim()))e.telegram=t.errs.telegram}
     if(s===1){if(form.country.trim().length<2)e.country=t.errs.country;if(form.city.trim().length<2)e.city=t.errs.city}
     if(s===2){if(!EMAIL_RE.test(form.email.trim()))e.email=t.errs.email;if(form.password.length<8)e.password=t.errs.password}
-    if(s===3){if(!validateFile(files.document_front))e.document_front=files.document_front?t.errs.file:t.errs.front;if(!isPassport&&!validateFile(files.document_back))e.document_back=files.document_back?t.errs.file:t.errs.back;if(!validateFile(files.document_selfie))e.document_selfie=files.document_selfie?t.errs.file:t.errs.selfie}
     setErrors(e);return Object.keys(e).length===0;
   };
   const next=()=>{if(checkStep())setStep(s=>s+1)};
 
   async function submit(){
-    if(!checkStep(3))return;
+    if(!validateBaseDocuments()||!validateCodeword())return;
     setStatus('sending');setError('');
-    const fd=new FormData();Object.entries(form).forEach(([k,v])=>fd.append(k,String(v)));fd.append('locale',locale);fd.append('document_front',files.document_front);if(files.document_back)fd.append('document_back',files.document_back);fd.append('document_selfie',files.document_selfie);
+    const fd=new FormData();Object.entries(form).forEach(([k,v])=>fd.append(k,String(v)));fd.append('locale',locale);fd.append('document_front',files.document_front);if(files.document_back)fd.append('document_back',files.document_back);fd.append('document_selfie',files.document_selfie);fd.append('document_codeword_selfie',files.document_codeword_selfie);
     try{const res=await fetch('/api/register',{method:'POST',body:fd});const body=await res.json().catch(()=>({}));if(!res.ok)throw new Error(body.error||'registration_failed');setStatus('success');setStep(4)}catch(e){console.error(e);setStatus('error');setError(t.error)}
   }
 
@@ -88,10 +107,11 @@ export default function RegistrationWizard({locale='ru'}){
       {step===1&&<><p className="register-kicker">02 / PROFILE</p><h2>{t.steps[1]}</h2><div className="reg-grid"><Input label={t.country} error={errors.country} value={form.country} onChange={setValue('country')}/><Input label={t.city} error={errors.city} value={form.city} onChange={setValue('city')}/></div><label className="reg-field"><span>{t.experience}</span><textarea value={form.experience} onChange={setValue('experience')} placeholder={t.expPh} maxLength="1000"/></label><div className="reg-grid"><Input label={t.schedule} value={form.schedule} onChange={setValue('schedule')} placeholder={t.schedulePh} maxLength="160"/><Input label={t.languages} value={form.languages} onChange={setValue('languages')} placeholder={t.langPh} maxLength="160"/></div></>}
       {step===2&&<><p className="register-kicker">03 / ACCOUNT</p><h2>{t.steps[2]}</h2><div className="reg-grid reg-grid--single"><Input label={t.email} error={errors.email} type="email" value={form.email} onChange={setValue('email')} autoComplete="email"/><Input label={t.password} error={errors.password} type="password" value={form.password} onChange={setValue('password')} autoComplete="new-password"/></div><p className="reg-note">{t.passHint}</p></>}
       {step===3&&verificationPage==='select'&&<><p className="register-kicker">04 / IDENTITY VERIFICATION</p><h2>{t.chooseDocTitle}</h2><p className="reg-note">{t.acceptedDocs}</p><p className="verification-choice-copy">{t.chooseDocCopy}</p><div className="verification-choice-grid">{t.docOptions.map(([value,label],index)=><button type="button" key={value} className={`verification-choice-card ${form.document_type===value?'active':''}`} onClick={()=>chooseDocument(value)}><span>0{index+1}</span><div><strong>{label}</strong><small>{value==='foreign_passport'?'PASSPORT + SELFIE':'FRONT + BACK + SELFIE'}</small></div><b>{form.document_type===value?'✓':'→'}</b></button>)}</div></>}
-      {step===3&&verificationPage==='upload'&&<><div className="verification-selected"><div><p className="register-kicker">04 / DOCUMENT PHOTO CHECK</p><h2>{selectedDocLabel}</h2></div><button type="button" onClick={()=>setVerificationPage('select')}>{locale==='ua'?'Змінити документ':locale==='en'?'Change document':'Изменить документ'}</button></div><DocumentExamples locale={locale} documentType={form.document_type}/><div className={`document-grid ${isPassport?'document-grid--two':'document-grid--three'}`}><label className={`document-drop ${files.document_front?'has-file':''} ${errors.document_front?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={pickFile('document_front')}/><span>01</span><strong>{isPassport?t.passportPhoto:t.front}</strong><small>{files.document_front?.name||'JPG / PNG / WEBP / PDF · max 8 MB'}</small>{errors.document_front&&<em>{errors.document_front}</em>}</label>{!isPassport&&<label className={`document-drop ${files.document_back?'has-file':''} ${errors.document_back?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={pickFile('document_back')}/><span>02</span><strong>{t.backDoc}</strong><small>{files.document_back?.name||'JPG / PNG / WEBP / PDF · max 8 MB'}</small>{errors.document_back&&<em>{errors.document_back}</em>}</label>}<label className={`document-drop document-drop--selfie ${files.document_selfie?'has-file':''} ${errors.document_selfie?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp" onChange={pickFile('document_selfie')}/><span>{isPassport?'02':'03'}</span><strong>{t.selfie}</strong><small>{files.document_selfie?.name||'JPG / PNG / WEBP · max 8 MB'}</small>{errors.document_selfie&&<em>{errors.document_selfie}</em>}</label></div><p className="reg-privacy reg-privacy--secure">✦ <strong>{t.privacy}</strong></p></>}
+      {step===3&&verificationPage==='upload'&&<><div className="verification-selected"><div><p className="register-kicker">04 / DOCUMENT PHOTO CHECK</p><h2>{selectedDocLabel}</h2></div><button type="button" onClick={()=>setVerificationPage('select')}>{locale==='ua'?'Змінити документ':locale==='en'?'Change document':'Изменить документ'}</button></div><DocumentExamples locale={locale} documentType={form.document_type}/><div className={`document-grid ${isPassport?'document-grid--two':'document-grid--three'}`}><label className={`document-drop ${files.document_front?'has-file':''} ${errors.document_front?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={pickFile('document_front')}/><span>01</span><strong>{isPassport?t.passportPhoto:t.front}</strong><small>{files.document_front?.name||'JPG / PNG / WEBP / PDF · max 8 MB'}</small><b className="document-drop__cta">{files.document_front?'✓ FILE SELECTED':'＋ UPLOAD PHOTO'}</b>{errors.document_front&&<em>{errors.document_front}</em>}</label>{!isPassport&&<label className={`document-drop ${files.document_back?'has-file':''} ${errors.document_back?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp,application/pdf" onChange={pickFile('document_back')}/><span>02</span><strong>{t.backDoc}</strong><small>{files.document_back?.name||'JPG / PNG / WEBP / PDF · max 8 MB'}</small><b className="document-drop__cta">{files.document_back?'✓ FILE SELECTED':'＋ UPLOAD PHOTO'}</b>{errors.document_back&&<em>{errors.document_back}</em>}</label>}<label className={`document-drop document-drop--selfie ${files.document_selfie?'has-file':''} ${errors.document_selfie?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp" onChange={pickFile('document_selfie',true)}/><span>{isPassport?'02':'03'}</span><strong>{t.selfie}</strong><small>{files.document_selfie?.name||'JPG / PNG / WEBP · max 8 MB'}</small><b className="document-drop__cta">{files.document_selfie?'✓ FILE SELECTED':'＋ UPLOAD PHOTO'}</b>{errors.document_selfie&&<em>{errors.document_selfie}</em>}</label></div><p className="reg-privacy reg-privacy--secure">✦ <strong>{t.privacy}</strong></p></>}
+      {step===3&&verificationPage==='codeword'&&<><CodewordVerification locale={locale} documentType={form.document_type}/><label className={`document-drop document-drop--codeword ${files.document_codeword_selfie?'has-file':''} ${errors.document_codeword_selfie?'is-error':''}`}><input type="file" accept="image/jpeg,image/png,image/webp" onChange={pickFile('document_codeword_selfie',true)}/><span>✓</span><strong>{t.codewordUpload}</strong><small>{files.document_codeword_selfie?.name||'JPG / PNG / WEBP · max 8 MB'}</small><b className="document-drop__cta">{files.document_codeword_selfie?'✓ FILE SELECTED':'＋ UPLOAD FINAL PHOTO'}</b>{errors.document_codeword_selfie&&<em>{errors.document_codeword_selfie}</em>}</label><p className="reg-privacy reg-privacy--secure">✦ <strong>{t.privacy}</strong></p></>}
       {step===4&&<div className="register-success"><div className="register-orbit">✓</div><p className="register-kicker">05 / REVIEW</p><h2>{t.reviewTitle}</h2><p>{t.reviewCopy}</p><a className="pink-btn" href={`/${locale}/account/`}>{t.account} ↗</a></div>}{error&&<p className="register-error">{error}</p>}
     </div>
-    {step<4&&<div className="register-nav"><button type="button" className="register-back" onClick={()=>{if(step===0){window.location.href=`/${locale}/`;return}if(step===3&&verificationPage==='upload'){setVerificationPage('select');return}setStep(s=>s-1)}}>{step===0?t.back:t.prev}</button>{step<3?<button type="button" className="pink-btn" onClick={next}>{t.next} ↗</button>:verificationPage==='select'?<button type="button" className="pink-btn" onClick={()=>setVerificationPage('upload')}>{t.next} ↗</button>:<button type="button" className="pink-btn" disabled={status==='sending'} onClick={submit}>{status==='sending'?t.sending:t.submit} ↗</button>}</div>}
+    {step<4&&<div className="register-nav"><button type="button" className="register-back" onClick={()=>{if(step===0){window.location.href=`/${locale}/`;return}if(step===3&&verificationPage==='codeword'){setVerificationPage('upload');setErrors({});return}if(step===3&&verificationPage==='upload'){setVerificationPage('select');setErrors({});return}setStep(s=>s-1)}}>{step===0?t.back:t.prev}</button>{step<3?<button type="button" className="pink-btn" onClick={next}>{t.next} ↗</button>:verificationPage==='select'?<button type="button" className="pink-btn" onClick={()=>setVerificationPage('upload')}>{t.next} ↗</button>:verificationPage==='upload'?<button type="button" className="pink-btn" onClick={()=>{if(validateBaseDocuments())setVerificationPage('codeword')}}>{t.next} ↗</button>:<button type="button" className="pink-btn" disabled={status==='sending'} onClick={submit}>{status==='sending'?t.sending:t.submit} ↗</button>}</div>}
     </section>
   </section></main>;
 }
