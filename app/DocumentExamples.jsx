@@ -21,19 +21,40 @@ const TEXT = {
   ru: {
     label:'ВЕРИФИКАЦИЯ', title:'ПРИМЕРЫ ФОТО ДОКУМЕНТОВ', intro:'Загрузите чёткие и качественные фото, как на примерах ниже. Это поможет быстрее пройти проверку.',
     names:{front:'Фото документа — лицевая сторона',back:'Фото документа — обратная сторона',passport:'Фото загранпаспорта',selfie:'Селфи с документом'},
-    quality:['Хорошее освещение','Вся информация чётко видна','Документ не обрезан','Без размытия, бликов и фильтров'],
+    qualityTitle:'ВАЖНО, ЧТОБЫ:',
+    quality:[
+      ['▧','Было хорошее освещение'],
+      ['⌾','Вся информация была чётко видна'],
+      ['⌜','Документ не был обрезан'],
+      ['✦','Фото не было размытым или засвеченным'],
+      ['◌','Использовались оригинальные фото, без фильтров и редактирования'],
+    ],
     docs:{id_card:'ID-карта',foreign_passport:'Загранпаспорт',driver_license:'Водительское удостоверение'}
   },
   ua: {
     label:'ВЕРИФІКАЦІЯ', title:'ПРИКЛАДИ ФОТО ДОКУМЕНТІВ', intro:'Завантажте чіткі та якісні фото, як у прикладах нижче. Це допоможе швидше пройти перевірку.',
     names:{front:'Фото документа — лицьова сторона',back:'Фото документа — зворотна сторона',passport:'Фото закордонного паспорта',selfie:'Селфі з документом'},
-    quality:['Хороше освітлення','Уся інформація чітко видна','Документ не обрізаний','Без розмиття, відблисків і фільтрів'],
+    qualityTitle:'ВАЖЛИВО, ЩОБ:',
+    quality:[
+      ['▧','Було хороше освітлення'],
+      ['⌾','Уся інформація була чітко видна'],
+      ['⌜','Документ не був обрізаний'],
+      ['✦','Фото не було розмитим або засвіченим'],
+      ['◌','Використовувалися оригінальні фото, без фільтрів і редагування'],
+    ],
     docs:{id_card:'ID-картка',foreign_passport:'Закордонний паспорт',driver_license:'Посвідчення водія'}
   },
   en: {
     label:'VERIFICATION', title:'DOCUMENT PHOTO EXAMPLES', intro:'Upload clear, high-quality photos like the examples below. This helps us review your verification faster.',
     names:{front:'Document photo — front side',back:'Document photo — back side',passport:'International passport photo',selfie:'Selfie with document'},
-    quality:['Good lighting','All information clearly visible','Document is not cropped','No blur, glare or filters'],
+    qualityTitle:'IMPORTANT:',
+    quality:[
+      ['▧','Use good lighting'],
+      ['⌾','Make sure all information is clearly visible'],
+      ['⌜','Do not crop the document'],
+      ['✦','Avoid blur, glare and overexposure'],
+      ['◌','Use original photos without filters or editing'],
+    ],
     docs:{id_card:'ID card',foreign_passport:'International passport',driver_license:'Driver’s license'}
   }
 };
@@ -54,7 +75,12 @@ export default function DocumentExamples({ locale='ru', documentType='id_card' }
           <div className="document-example-card__media"><img src={src} alt={t.names[type]}/></div>
         </article>)}
       </div>
-      <div className="document-quality">{t.quality.map(item=><div key={item}><i>✦</i><span>{item}</span></div>)}</div>
+      <section className="document-quality-panel" aria-label={t.qualityTitle}>
+        <p className="document-quality-panel__title">{t.qualityTitle}</p>
+        <div className="document-quality">
+          {t.quality.map(([icon,item])=><div key={item}><i>{icon}</i><span>{item}</span></div>)}
+        </div>
+      </section>
     </div>
   </section>;
 }
