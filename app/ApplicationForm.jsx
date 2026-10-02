@@ -87,6 +87,7 @@ export function ApplicationModal({ locale = 'ru' }) {
 
       track('form_submit', { form_name: 'cosmo_application', locale });
       track('lead', { form_name: 'cosmo_application', locale });
+      window.fbq?.('track', 'Lead', { content_name: 'cosmo_application', locale });
       setStatus('success');
       form.reset();
     } catch (error) {
