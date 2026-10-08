@@ -118,11 +118,17 @@ export default function CosmoPage({ locale = 'ru' }) {
           <p className="eyebrow">{t.eyebrow}</p>
           <h1>{t.hero1}<br/><em>{t.hero2}</em></h1>
           <p className="hero__copy">{t.heroCopy}</p>
-          <div className="hero__actions">
-            <ApplicationTrigger className="pink-btn">{t.start} <ArrowUpRight /></ApplicationTrigger>
-            <a className="register-hero-btn" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a>
-            <a className="hr-telegram-link hero-hr-link" href="https://t.me/Hr_cosmo" target="_blank" rel="noopener noreferrer">{hrTelegramLabel} <ArrowUpRight /></a>
-            <a className="text-link" href="#how">{t.learn} <span>↓</span></a>
+          <div className="hero__actions-stack">
+            <div className="hero__actions">
+              <ApplicationTrigger className="pink-btn">{t.start} <ArrowUpRight /></ApplicationTrigger>
+              <a className="register-hero-btn" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a>
+              <a className="text-link" href="#how">{t.learn} <span>↓</span></a>
+            </div>
+            <a className="hero-hr-subtle" href="https://t.me/Hr_cosmo" target="_blank" rel="noopener noreferrer">
+              <span className="hero-hr-subtle__icon">✦</span>
+              <span>{hrTelegramLabel}</span>
+              <ArrowUpRight />
+            </a>
           </div>
           <div className="platforms"><p>{t.platforms}</p><div className="platforms__row"><img src="/img/stripchat-logo (new).png" alt="Stripchat"/><img src="/img/myfreecams-logo (new).png" alt="MyFreeCams"/><img src="/img/chaturbate-logo (new).png" alt="Chaturbate"/><span>{t.others}</span></div></div>
         </div>
