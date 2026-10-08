@@ -129,8 +129,8 @@ export function ApplicationModal({ locale = 'ru' }) {
               <input name="phone" type="tel" inputMode="tel" autoComplete="tel" required minLength="7" maxLength="30" placeholder="+380 ..." />
             </label>
             <label>
-              <span>{t.telegram}</span>
-              <input name="telegram" autoComplete="off" maxLength="80" placeholder="@username" />
+              <span>{t.telegram} <b>*</b></span>
+              <input name="telegram" autoComplete="off" required minLength="6" maxLength="33" pattern="@[A-Za-z0-9_]{5,32}" title="@username" placeholder="@username" />
             </label>
             <button className="pink-btn lead-form__submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? t.sending : t.submit}</button>
             <p className="lead-form__required">{t.required}</p>
