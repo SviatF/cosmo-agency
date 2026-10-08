@@ -94,6 +94,7 @@ export default function CosmoPage({ locale = 'ru' }) {
   const steps = onboardingSteps(locale);
   const registration = registrationCopy(locale);
   const registerLabel = registration.cta;
+  const hrTelegramLabel = locale === 'ua' ? 'Написати HR у Telegram' : locale === 'en' ? 'Message HR on Telegram' : 'Написать HR в Telegram';
 
   return <>
     <SiteEffects />
@@ -120,6 +121,7 @@ export default function CosmoPage({ locale = 'ru' }) {
           <div className="hero__actions">
             <ApplicationTrigger className="pink-btn">{t.start} <ArrowUpRight /></ApplicationTrigger>
             <a className="register-hero-btn" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a>
+            <a className="hr-telegram-link hero-hr-link" href="https://t.me/Hr_cosmo" target="_blank" rel="noopener noreferrer">{hrTelegramLabel} <ArrowUpRight /></a>
             <a className="text-link" href="#how">{t.learn} <span>↓</span></a>
           </div>
           <div className="platforms"><p>{t.platforms}</p><div className="platforms__row"><img src="/img/stripchat-logo (new).png" alt="Stripchat"/><img src="/img/myfreecams-logo (new).png" alt="MyFreeCams"/><img src="/img/chaturbate-logo (new).png" alt="Chaturbate"/><span>{t.others}</span></div></div>
@@ -148,7 +150,7 @@ export default function CosmoPage({ locale = 'ru' }) {
         <div className="footer-zone shell" id="contacts">
           <div className="footer-zone__left">{t.footerWords[0]} <b>•</b> {t.footerWords[1]} <b>•</b> {t.footerWords[2]}</div>
           <div className="footer-zone__center"><PlanetLogo footer/><p>{t.footerTag}</p></div>
-          <div className="footer-zone__right"><a className="pink-btn pink-btn--small" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a><button className="moon" aria-label="Theme" type="button">◐</button></div>
+          <div className="footer-zone__right"><a className="hr-telegram-link footer-hr-link" href="https://t.me/Hr_cosmo" target="_blank" rel="noopener noreferrer">{hrTelegramLabel}</a><a className="pink-btn pink-btn--small" href={`/${locale}/register/`}>{registerLabel} <ArrowUpRight /></a><button className="moon" aria-label="Theme" type="button">◐</button></div>
         </div>
       </section>
 
@@ -183,7 +185,7 @@ export default function CosmoPage({ locale = 'ru' }) {
             <p className="eyebrow">{t.aboutEyebrow}</p>
             <h2>{t.aboutTitle}</h2>
             <p>{t.aboutCopy}</p>
-            <div className="seo-content__actions"><ApplicationTrigger className="pink-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger><a href={`/${locale}/register/`} className="register-inline-cta">{registerLabel} ↗</a><a href="mailto:hello@cosmo.agency" className="text-link">hello@cosmo.agency</a></div>
+            <div className="seo-content__actions"><ApplicationTrigger className="pink-btn">{t.apply} <ArrowUpRight /></ApplicationTrigger><a href={`/${locale}/register/`} className="register-inline-cta">{registerLabel} ↗</a><a href="https://t.me/Hr_cosmo" target="_blank" rel="noopener noreferrer" className="text-link">{hrTelegramLabel} ↗</a><a href="mailto:hello@cosmo.agency" className="text-link">hello@cosmo.agency</a></div>
           </div>
 
           <div className="faq" id="faq">
@@ -194,7 +196,7 @@ export default function CosmoPage({ locale = 'ru' }) {
             </div>
           </div>
         </div>
-        <div className="legal-bar shell"><span>18+</span><a href="/privacy/">{t.privacy}</a><a href="/terms/">{t.terms}</a><a href={`/${locale}/account/`}>{locale === 'ua' ? 'Кабінет' : locale === 'en' ? 'Account' : 'Кабинет'}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
+        <div className="legal-bar shell"><span>18+</span><a href="/privacy/">{t.privacy}</a><a href="/terms/">{t.terms}</a><a href={`/${locale}/account/`}>{locale === 'ua' ? 'Кабінет' : locale === 'en' ? 'Account' : 'Кабинет'}</a><a href="https://t.me/Hr_cosmo" target="_blank" rel="noopener noreferrer">{locale === 'ua' ? 'HR у Telegram' : locale === 'en' ? 'HR on Telegram' : 'HR в Telegram'}</a><a href="mailto:hello@cosmo.agency">{t.contacts}</a></div>
       </section>
     </main>
     <a className="mobile-cta mobile-cta--registration" href={`/${locale}/register/`}>{registerLabel} ↗</a>
