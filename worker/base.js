@@ -63,8 +63,10 @@ async function insertApplication(env, row) {
 
 async function handleLead(request, env) {
   const data = await request.json();
+  const telegram=String(data.telegram||'').trim();
   if (!data.name || !data.phone || !validPhone(data.phone)) return json({ error:'name_and_valid_phone_required' },400);
-  await sendTelegram(env, ['<b>🌌 COSMO — новая заявка</b>',`Имя: <b>${esc(data.name)}</b>`,`Телефон: ${esc(data.phone)}`,`Telegram: ${esc(data.telegram||'—')}`,`Язык: ${esc(data.locale||'ru')}`,`Страница: ${esc(data.page||'—')}`].join('\n'));
+  if (!telegram || !TG_RE.test(telegram)) return json({ error:'valid_telegram_required' },400);
+  await sendTelegram(env, ['<b>🌌 COSMO — новая заявка</b>',`Имя: <b>${esc(data.name)}</b>`,`Телефон: ${esc(data.phone)}`,`Telegram: ${esc(telegram)}`,`Язык: ${esc(data.locale||'ru')}`,`Страница: ${esc(data.page||'—')}`].join('\n'));
   return json({ ok:true });
 }
 
